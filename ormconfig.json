@@ -2,9 +2,9 @@
    "type": "postgres",
    "host": "localhost",
    "port": 5432,
-   "username": "test",
-   "password": "test",
-   "database": "test",
+   "username": "postgres",
+   "password": "docker",
+   "database": "postgres",
    "synchronize": true,
    "logging": false,
    "entities": [
@@ -20,5 +20,6 @@
       "entitiesDir": "src/entity",
       "migrationsDir": "src/migration",
       "subscribersDir": "src/subscriber"
-   }
+   },
+   "migrationsTableName": "_migration_table"
 }

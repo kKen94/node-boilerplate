@@ -2,22 +2,22 @@ import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { validate } from "class-validator";
 
-import { User } from "../entity/User";
+import { User } from "../entity/user";
+import { UserService } from "../service/userService";
+import { Service } from "../utils/injection";
 
-class UserController{
+@Service()
+export class UserController {
 
-    static listAll = async (req: Request, res: Response) => {
-        //Get users from database
-        const userRepository = getRepository(User);
-        const users = await userRepository.find({
-            select: ["id", "username", "role"] //We dont want to send the passwords on response
-        });
+    constructor(private userService: UserService) {
+    }
 
-        //Send the users object
+    getAll = async (req: Request, res: Response) => {
+        const users = await this.userService.getAllUsers();
         res.send(users);
     };
 
-    static getOneById = async (req: Request, res: Response) => {
+    getOneById = async (req: Request, res: Response) => {
         //Get the ID from the url
         const id: number = parseInt(req.params.id);
 
@@ -32,7 +32,7 @@ class UserController{
         }
     };
 
-    static newUser = async (req: Request, res: Response) => {
+    newUser = async (req: Request, res: Response) => {
         //Get parameters from the body
         let { username, password, role } = req.body;
         let user = new User();
@@ -63,7 +63,7 @@ class UserController{
         res.status(201).send("User created");
     };
 
-    static editUser = async (req: Request, res: Response) => {
+    editUser = async (req: Request, res: Response) => {
         //Get the ID from the url
         const id = req.params.id;
 
@@ -101,7 +101,7 @@ class UserController{
         res.status(204).send();
     };
 
-    static deleteUser = async (req: Request, res: Response) => {
+    deleteUser = async (req: Request, res: Response) => {
         //Get the ID from the url
         const id = req.params.id;
 
@@ -118,6 +118,4 @@ class UserController{
         //After all send a 204 (no content, but accepted) response
         res.status(204).send();
     };
-};
-
-export default UserController;
+}

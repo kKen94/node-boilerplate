@@ -3,7 +3,7 @@ import * as jwt from "jsonwebtoken";
 import { getRepository } from "typeorm";
 import { validate } from "class-validator";
 
-import { User } from "../entity/User";
+import { User } from "../entity/user";
 import config from "../config/config";
 
 class AuthController {
@@ -66,7 +66,7 @@ class AuthController {
         }
 
         //Validate de model (password lenght)
-        user.password = newPassword;
+        user.passwordHash = newPassword;
         const errors = await validate(user);
         if (errors.length > 0) {
             res.status(400).send(errors);
