@@ -1,7 +1,7 @@
 import { getCustomRepository } from 'typeorm';
 import { UserRepository } from "../repository/userRepository";
 import { User } from "../entity/user";
-import { Service } from "../utils/injection";
+import { Service } from "../helper/injection";
 
 @Service()
 export class UserService {

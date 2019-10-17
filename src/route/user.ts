@@ -2,7 +2,7 @@ import { Router } from "express";
 import { UserController } from "../controller/userController";
 import { checkRole } from "../middleware/checkRole";
 import { checkJwt } from "../middleware/checkJwt";
-import { Injector } from "../utils/injection";
+import { Injector } from "../helper/injection";
 
 const router = Router();
 const userController = Injector.resolve<UserController>(UserController);

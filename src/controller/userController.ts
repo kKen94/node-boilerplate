@@ -4,7 +4,7 @@ import { validate } from "class-validator";
 
 import { User } from "../entity/user";
 import { UserService } from "../service/userService";
-import { Service } from "../utils/injection";
+import { Service } from "../helper/injection";
 
 @Service()
 export class UserController {
@@ -37,7 +37,7 @@ export class UserController {
         let { username, password, role } = req.body;
         let user = new User();
         user.username = username;
-        user.password = password;
+        user.passwordHash = password;
         user.role = role;
 
         //Validade if the parameters are ok
@@ -49,6 +49,8 @@ export class UserController {
 
         //Hash the password, to securely store on DB
         user.hashPassword();
+
+        // TODO: Spostare dall'entità i metodi e spostarli in una utility
 
         //Try to save. If fails, the username is already in use
         const userRepository = getRepository(User);
