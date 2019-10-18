@@ -1,15 +1,16 @@
-import { getCustomRepository } from 'typeorm';
+
 import { UserRepository } from "../repository/userRepository";
 import { User } from "../entity/user";
-import { Service } from "../helper/injection";
+import { Service } from "typedi";
+import { InjectRepository } from "typeorm-typedi-extensions";
 
 @Service()
 export class UserService {
-    private userRepository: UserRepository;
 
-    constructor() {
-        this.userRepository = getCustomRepository(UserRepository);
-    }
+    constructor(
+        @InjectRepository()
+        private readonly userRepository: UserRepository,
+        ) { }
 
     public async getAllUsers(): Promise<User[]> {
         return await this.userRepository.all();

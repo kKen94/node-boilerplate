@@ -25,13 +25,16 @@
       "swagger-jsdoc": "^3.4.0",
       "swagger-ui-express": "^4.1.2",
       "ts-node-dev": "^1.0.0-pre.43",
-      "typeorm": "0.2.19"
+      "typedi": "^0.8.0",
+      "typeorm": "0.2.20",
+      "typeorm-typedi-extensions": "^0.2.3"
    },
    "scripts": {
       "tsc": "tsc",
       "start": "set debug=* && ts-node-dev --respawn --transpileOnly ./src/index.ts",
-      "prod": "tsc && node ./build/app.js",
+      "prod": "tsc && node ./build/index.js",
       "add-migration": "ts-node ./node_modules/typeorm/cli.js migration:generate -n",
-      "update-database": "ts-node ./node_modules/typeorm/cli.js migration:run"
+      "update-database": "ts-node ./node_modules/typeorm/cli.js migration:run",
+      "typeorm": "./node_modules/.bin/typeorm "
    }
 }

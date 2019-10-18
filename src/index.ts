@@ -1,14 +1,15 @@
 import "reflect-metadata";
-import { createConnection } from "typeorm";
 import * as express from "express";
 import * as bodyParser from "body-parser";
 import routes from "./route";
 import * as cors from "cors";
 import * as helmet from "helmet";
+import { createConnection, useContainer } from "typeorm";
+import { Container } from "typedi";
 
+useContainer(Container);
 createConnection()
     .then(async connection => {
-
         // create express app
         const app = express();
 

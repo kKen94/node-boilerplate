@@ -4,7 +4,7 @@ import { validate } from "class-validator";
 
 import { User } from "../entity/user";
 import { UserService } from "../service/userService";
-import { Service } from "../helper/injection";
+import { Service } from "typedi";
 
 @Service()
 export class UserController {
