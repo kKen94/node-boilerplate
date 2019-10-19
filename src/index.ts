@@ -9,7 +9,7 @@ import { Container } from "typedi";
 
 useContainer(Container);
 createConnection()
-    .then(async connection => {
+    .then(connection => {
         // create express app
         const app = express();
 

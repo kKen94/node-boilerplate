@@ -4,7 +4,7 @@ import {
     Column,
     Unique,
     CreateDateColumn,
-    UpdateDateColumn
+    UpdateDateColumn,
 } from "typeorm";
 import { Length, IsNotEmpty, IsEmail, IsBoolean, IsDate, IsInt } from "class-validator";
 import * as bcrypt from "bcryptjs";
