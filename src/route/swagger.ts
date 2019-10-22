@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { swaggerUi } from "swagger-ui-express";
+import * as swaggerUi from "swagger-ui-express";
 import { specs } from "../helper/swagger";
 
 const router = Router();
