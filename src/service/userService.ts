@@ -1,16 +1,16 @@
 
 import { UserRepository } from "../repository/userRepository";
 import { User } from "../entity/user";
-import { Service } from "typedi";
-import { InjectRepository } from "typeorm-typedi-extensions";
+import { Container, Service } from "typedi";
 
 @Service()
 export class UserService {
 
-    constructor(
-        @InjectRepository()
-        private readonly userRepository: UserRepository,
-        ) { }
+    private readonly userRepository: UserRepository;
+
+    constructor() {
+        this.userRepository = Container.get(UserRepository);
+    }
 
     public async getAllUsers(): Promise<User[]> {
         return await this.userRepository.all();
