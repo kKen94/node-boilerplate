@@ -8,17 +8,17 @@ export = {
    synchronize: false,
    logging: true,
    entities: [
-      "src/entity/**/*.ts"
+      "src/entities/**/*.ts"
    ],
    migrations: [
-      "src/migration/**/*.ts"
+      "src/migrations/**/*.ts"
    ],
    subscribers: [
       "src/subscriber/**/*.ts"
    ],
    cli: {
-      entitiesDir: "src/entity",
-      migrationsDir: "src/migration",
+      entitiesDir: "src/entities",
+      migrationsDir: "src/migrations",
       subscribersDir: "src/subscriber"
    },
    migrationsTableName: "_migration_table"
