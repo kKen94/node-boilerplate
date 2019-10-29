@@ -3,8 +3,8 @@ import * as jwt from "jsonwebtoken";
 import { getRepository } from "typeorm";
 import { validate } from "class-validator";
 
-import { User } from "../entity/user";
-import config from "../config/config";
+import { User } from "../entities/user";
+import config from "../configs/config";
 
 class AuthController {
     static login = async (req: Request, res: Response) => {
