@@ -1,10 +1,7 @@
 import { User } from "../entities/user";
 import { GenericRepository } from "./genericRepository";
-import { Connection, EntityRepository, Repository } from "typeorm";
-import { Service } from "typedi";
-import { InjectConnection } from "typeorm-typedi-extensions";
+import { EntityRepository } from "typeorm";
 
-@Service()
 @EntityRepository(User)
 export class UserRepository extends GenericRepository<User> {
 

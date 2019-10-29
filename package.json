@@ -30,9 +30,7 @@
       "routing-controllers": "^0.8.0",
       "routing-controllers-openapi": "^1.7.0",
       "ts-node-dev": "^1.0.0-pre.43",
-      "typedi": "^0.8.0",
-      "typeorm": "^0.2.20",
-      "typeorm-typedi-extensions": "^0.2.3"
+      "typeorm": "^0.2.20"
    },
    "scripts": {
       "tsc": "tsc",

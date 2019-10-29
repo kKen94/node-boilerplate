@@ -4,7 +4,6 @@ import * as cors from "cors";
 import * as helmet from "helmet";
 import * as jwt from "jsonwebtoken";
 import { createConnection, useContainer } from "typeorm";
-import { Container } from "typedi";
 import { Action, createExpressServer } from "routing-controllers";
 import { UserRepository } from "./repositories/userRepository";
 import config from "./configs/config";
@@ -46,7 +45,6 @@ const routingControllersOptions = {
     },
 };
 
-useContainer(Container);
 createConnection()
     .then(async connection => {
 

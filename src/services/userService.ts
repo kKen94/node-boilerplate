@@ -1,11 +1,9 @@
 import { UserRepository } from "../repositories/userRepository";
 import { User } from "../entities/user";
-import { Container, Service } from "typedi";
 import { UserAddDto, UserUpdateDto } from "../entities/dto/userDto";
 import { validate } from "class-validator";
 import { DeleteResult, InsertResult, UpdateResult } from "typeorm";
 
-@Service()
 export class UserService {
 
     private readonly userRepository: UserRepository;

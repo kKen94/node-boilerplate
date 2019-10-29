@@ -1,24 +1,11 @@
 import {
     AbstractRepository,
     DeleteResult,
-    EntityManager,
     InsertResult,
     UpdateResult
 } from "typeorm";
-import { Service } from "typedi";
-import { InjectManager } from "typeorm-typedi-extensions";
 
-@Service()
 export class GenericRepository<T> extends AbstractRepository<T> {
-
-    @InjectManager()
-    private entityManager: EntityManager;
-    // TODO: verificare che l'errore non fosse dovuto ai path cartella sbagliati
-
-    constructor() {
-        super();
-        this.manager =  this.entityManager;
-    }
 
     public async all(): Promise<T[]> {
         return await this.repository.find();
