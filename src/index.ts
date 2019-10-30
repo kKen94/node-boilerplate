@@ -3,7 +3,7 @@ import * as bodyParser from "body-parser";
 import * as cors from "cors";
 import * as helmet from "helmet";
 import * as jwt from "jsonwebtoken";
-import { createConnection, useContainer } from "typeorm";
+import { createConnection, getCustomRepository } from "typeorm";
 import { Action, createExpressServer } from "routing-controllers";
 import { UserRepository } from "./repositories/userRepository";
 import config from "./configs/config";
@@ -36,7 +36,7 @@ const routingControllersOptions = {
         }
 
         if (roles.length) {
-            const userRepository = Container.get(UserRepository);
+            const userRepository = getCustomRepository(UserRepository);
             const user = await userRepository.findOneByToken(token);
             return roles.includes(user.role);
         }
@@ -57,7 +57,6 @@ createConnection()
 
         app.use(helmet());
         app.use(bodyParser.json());
-
         // Parse class-validator classes into JSON Schema:
         // const metadatas = (getFromContainer(MetadataStorage) as any).validationMetadatas;
         // const schemas = validationMetadatasToSchemas(metadatas, {

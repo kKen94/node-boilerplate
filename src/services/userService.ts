@@ -2,15 +2,11 @@ import { UserRepository } from "../repositories/userRepository";
 import { User } from "../entities/user";
 import { UserAddDto, UserUpdateDto } from "../entities/dto/userDto";
 import { validate } from "class-validator";
-import { DeleteResult, InsertResult, UpdateResult } from "typeorm";
+import { DeleteResult, getCustomRepository, InsertResult, UpdateResult } from "typeorm";
 
 export class UserService {
 
-    private readonly userRepository: UserRepository;
-
-    constructor() {
-        this.userRepository = Container.get(UserRepository);
-    }
+    private readonly userRepository = getCustomRepository(UserRepository);
 
     public async getAllUsers(): Promise<User[]> {
         return await this.userRepository.all();

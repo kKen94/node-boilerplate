@@ -1,7 +1,6 @@
 import { UserService } from "../services/userService";
-import { Authorized, Body, Delete, Get, HttpCode, JsonController, Param, Post, Put } from "routing-controllers";
+import { Authorized, Body, Delete, Get, Header, HttpCode, JsonController, Param, Post, Put } from "routing-controllers";
 import { UserAddDto, UserUpdateDto } from "../entities/dto/userDto";
-import { Container } from "typedi";
 
 @JsonController("/users")
 export class UserController {
@@ -9,16 +8,18 @@ export class UserController {
     private readonly userService: UserService;
 
     constructor() {
-        this.userService = Container.get(UserService)
+        this.userService = new UserService();
     }
 
     @Get()
+    @HttpCode(200)
     async getAll() {
         return await this.userService.getAllUsers();
     };
 
     // @Authorized("ADMIN")
     @Get("/:id")
+    @HttpCode(200)
     async getOne(@Param("id") id: string) {
         return await this.userService.getOne(id);
     };
