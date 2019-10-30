@@ -1,91 +1,91 @@
+import * as bcrypt from 'bcryptjs';
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  Unique,
-  CreateDateColumn,
-  UpdateDateColumn
-} from 'typeorm';
-import {
-  Length,
-  IsNotEmpty,
-  IsEmail,
   IsBoolean,
   IsDate,
-  IsInt
+  IsEmail,
+  IsInt,
+  IsNotEmpty,
+  Length,
 } from 'class-validator';
-import * as bcrypt from 'bcryptjs';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  Unique,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity()
 @Unique(['username'])
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  public id: string;
 
   @Column()
   @Length(5, 20)
-  username: string;
+  public username: string;
 
   @Column()
   @Length(4, 100)
-  passwordHash: string;
+  public passwordHash: string;
 
   @Column()
   @IsDate()
-  passwordExpiration: Date;
+  public passwordExpiration: Date;
 
   @Column({ default: 3 })
   @IsInt()
-  passwordHistoryLimit: number;
+  public passwordHistoryLimit: number;
 
   @Column({ default: false })
   @IsBoolean()
-  forceResetPassword: boolean;
+  public forceResetPassword: boolean;
 
   @Column()
   @IsEmail()
-  email: string;
+  public email: string;
 
   @Column({ default: false })
   @IsBoolean()
-  emailConfirmed: boolean;
+  public emailConfirmed: boolean;
 
   @Column({ nullable: true })
-  phoneNumber?: string;
+  public phoneNumber?: string;
 
   @Column({ default: false })
   @IsBoolean()
-  phoneNumberConfirmed: boolean;
+  public phoneNumberConfirmed: boolean;
 
   @Column({ default: false })
   @IsBoolean()
-  twoFactorEnabled: boolean;
+  public twoFactorEnabled: boolean;
 
   @Column()
   @IsNotEmpty()
-  role: string;
+  public role: string;
 
   @Column()
   @CreateDateColumn()
-  createdAt: Date;
+  public createdAt: Date;
 
   @Column()
   @UpdateDateColumn()
-  updatedAt: Date;
+  public updatedAt: Date;
 
   @Column()
   @IsDate()
-  lastLogin: Date;
+  public lastLogin: Date;
 
   @Column({ default: true })
   @IsBoolean()
-  active: boolean;
+  public active: boolean;
 
-  hashPassword() {
+  public hashPassword() {
     this.passwordHash = bcrypt.hashSync(this.passwordHash, 8);
   }
 
-  checkIfUnencryptedPasswordIsValid(unencryptedPassword: string) {
+  public checkIfUnencryptedPasswordIsValid(unencryptedPassword: string) {
     return bcrypt.compareSync(unencryptedPassword, this.passwordHash);
   }
 }
