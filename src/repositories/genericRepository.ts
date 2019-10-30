@@ -2,7 +2,7 @@ import {
   AbstractRepository,
   DeleteResult,
   InsertResult,
-  UpdateResult,
+  UpdateResult
 } from 'typeorm';
 
 export class GenericRepository<T> extends AbstractRepository<T> {

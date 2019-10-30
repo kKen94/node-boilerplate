@@ -3,7 +3,7 @@ import {
   DeleteResult,
   getCustomRepository,
   InsertResult,
-  UpdateResult,
+  UpdateResult
 } from 'typeorm';
 import { UserAddDto, UserUpdateDto } from '../entities/dto/userDto';
 import { User } from '../entities/user';
@@ -41,7 +41,7 @@ export class UserService {
 
   public async update(
     id: string,
-    userDto: UserUpdateDto,
+    userDto: UserUpdateDto
   ): Promise<UpdateResult> {
     const user = await this.userRepository.one(id);
     user.phoneNumber = userDto.phoneNumber;

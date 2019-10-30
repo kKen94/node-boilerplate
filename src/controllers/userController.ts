@@ -7,7 +7,7 @@ import {
   JsonController,
   Param,
   Post,
-  Put,
+  Put
 } from 'routing-controllers';
 import { UserAddDto, UserUpdateDto } from '../entities/dto/userDto';
 import { UserService } from '../services/userService';

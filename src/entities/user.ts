@@ -5,7 +5,7 @@ import {
   IsEmail,
   IsInt,
   IsNotEmpty,
-  Length,
+  Length
 } from 'class-validator';
 import {
   Column,
@@ -13,7 +13,7 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Unique,
-  UpdateDateColumn,
+  UpdateDateColumn
 } from 'typeorm';
 
 @Entity()
