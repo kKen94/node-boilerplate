@@ -3,7 +3,7 @@ import {
   DeleteResult,
   InsertResult,
   UpdateResult,
-} from "typeorm";
+} from 'typeorm';
 
 export class GenericRepository<T> extends AbstractRepository<T> {
   public async all(): Promise<T[]> {

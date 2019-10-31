@@ -1,21 +1,21 @@
-import "reflect-metadata";
-import * as bodyParser from "body-parser";
-import * as cors from "cors";
-import * as helmet from "helmet";
-import * as jwt from "jsonwebtoken";
-import { createConnection, getCustomRepository } from "typeorm";
-import { Action, createExpressServer } from "routing-controllers";
-import { UserRepository } from "./repositories/userRepository";
-import config from "./configs/config";
+import 'reflect-metadata';
+import * as bodyParser from 'body-parser';
+import * as cors from 'cors';
+import * as helmet from 'helmet';
+import * as jwt from 'jsonwebtoken';
+import { createConnection, getCustomRepository } from 'typeorm';
+import { Action, createExpressServer } from 'routing-controllers';
+import { UserRepository } from './repositories/userRepository';
+import config from './configs/config';
 
 const corsOptions = {
-  origin: "http://example.com",
+  origin: 'http://example.com',
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
 const routingControllersOptions = {
-  routePrefix: "/api",
-  controllers: [__dirname + "/controllers/**/*.ts"],
+  routePrefix: '/api',
+  controllers: [__dirname + '/controllers/**/*.ts'],
   // middlewares: [__dirname + "/middlewares/**/*.ts"],
   defaults: {
     nullResultCode: 404,
@@ -28,7 +28,7 @@ const routingControllersOptions = {
     // checker must return either boolean (true or false)
     // either promise that resolves a boolean value
     // demo code:
-    const token = action.request.headers["authorization"];
+    const token = action.request.headers['authorization'];
     try {
       jwt.verify(token, config.jwtSecret);
     } catch (e) {
@@ -83,7 +83,7 @@ createConnection()
     // });
 
     app.listen(3001, () => {
-      console.log("Server started on port 3001");
+      console.log('Server started on port 3001');
     });
   })
   .catch(error => console.log(error));

@@ -1,13 +1,13 @@
-import { validate } from "class-validator";
+import { validate } from 'class-validator';
 import {
   DeleteResult,
   getCustomRepository,
   InsertResult,
   UpdateResult,
-} from "typeorm";
-import { UserAddDto, UserUpdateDto } from "../entities/dto/userDto";
-import { User } from "../entities/user";
-import { UserRepository } from "../repositories/userRepository";
+} from 'typeorm';
+import { UserAddDto, UserUpdateDto } from '../entities/dto/userDto';
+import { User } from '../entities/user';
+import { UserRepository } from '../repositories/userRepository';
 
 export class UserService {
   private readonly userRepository = getCustomRepository(UserRepository);
