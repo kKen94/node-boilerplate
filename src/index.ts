@@ -44,7 +44,7 @@ const routingControllersOptions = {
 };
 
 createConnection()
-  .then(async connection => {
+  .then(async (connection) => {
     // create express app
     const app = createExpressServer(routingControllersOptions);
 
@@ -86,4 +86,4 @@ createConnection()
       console.log('Server started on port 3001');
     });
   })
-  .catch(error => console.log(error));
+  .catch((error) => console.log(error));
