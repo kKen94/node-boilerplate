@@ -7,12 +7,12 @@ import {
   JsonController,
   Param,
   Post,
-  Put
-} from 'routing-controllers';
-import { UserAddDto, UserUpdateDto } from '../entities/dto/userDto';
-import { UserService } from '../services/userService';
+  Put,
+} from "routing-controllers";
+import { UserAddDto, UserUpdateDto } from "../entities/dto/userDto";
+import { UserService } from "../services/userService";
 
-@JsonController('/users')
+@JsonController("/users")
 export class UserController {
   private readonly userService: UserService;
 
@@ -27,9 +27,9 @@ export class UserController {
   }
 
   // @Authorized("ADMIN")
-  @Get('/:id')
+  @Get("/:id")
   @HttpCode(200)
-  public async getOne(@Param('id') id: string) {
+  public async getOne(@Param("id") id: string) {
     return await this.userService.getOne(id);
   }
 
@@ -42,15 +42,15 @@ export class UserController {
 
   @Authorized()
   @HttpCode(204)
-  @Put('/:id')
-  public async update(@Param('id') id: string, @Body() userDto: UserUpdateDto) {
+  @Put("/:id")
+  public async update(@Param("id") id: string, @Body() userDto: UserUpdateDto) {
     return await this.userService.update(id, userDto);
   }
 
   @Authorized()
   @HttpCode(204)
-  @Delete('/:id')
-  public async delete(@Param('id') id: string) {
+  @Delete("/:id")
+  public async delete(@Param("id") id: string) {
     return await this.userService.delete(id);
   }
 }

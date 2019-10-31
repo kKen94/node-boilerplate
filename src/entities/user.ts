@@ -1,25 +1,25 @@
-import * as bcrypt from 'bcryptjs';
+import * as bcrypt from "bcryptjs";
 import {
   IsBoolean,
   IsDate,
   IsEmail,
   IsInt,
   IsNotEmpty,
-  Length
-} from 'class-validator';
+  Length,
+} from "class-validator";
 import {
   Column,
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
   Unique,
-  UpdateDateColumn
-} from 'typeorm';
+  UpdateDateColumn,
+} from "typeorm";
 
 @Entity()
-@Unique(['username'])
+@Unique(["username"])
 export class User {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   public id: string;
 
   @Column()
