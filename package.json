@@ -36,6 +36,7 @@
       "routing-controllers": "^0.8.0",
       "routing-controllers-openapi": "^1.7.0",
       "ts-node-dev": "^1.0.0-pre.43",
+      "tsyringe": "^3.4.0",
       "typeorm": "^0.2.20"
    },
    "scripts": {

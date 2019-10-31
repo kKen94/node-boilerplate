@@ -11,13 +11,14 @@ import {
 } from 'routing-controllers';
 import { UserAddDto, UserUpdateDto } from '../entities/dto/userDto';
 import { UserService } from '../services/userService';
+import { container } from 'tsyringe';
 
 @JsonController('/users')
 export class UserController {
   private readonly userService: UserService;
 
   constructor() {
-    this.userService = new UserService();
+    this.userService = container.resolve(UserService);
   }
 
   @Get()

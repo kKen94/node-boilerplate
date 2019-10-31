@@ -8,7 +8,9 @@ import {
 import { UserAddDto, UserUpdateDto } from '../entities/dto/userDto';
 import { User } from '../entities/user';
 import { UserRepository } from '../repositories/userRepository';
+import { injectable } from 'tsyringe';
 
+@injectable()
 export class UserService {
   private readonly userRepository = getCustomRepository(UserRepository);
 
@@ -41,7 +43,7 @@ export class UserService {
 
   public async update(
     id: string,
-    userDto: UserUpdateDto
+    userDto: UserUpdateDto,
   ): Promise<UpdateResult> {
     const user = await this.userRepository.one(id);
     user.phoneNumber = userDto.phoneNumber;
