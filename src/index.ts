@@ -1,12 +1,12 @@
-import 'reflect-metadata';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import * as helmet from 'helmet';
 import * as jwt from 'jsonwebtoken';
-import { createConnection, getCustomRepository } from 'typeorm';
+import 'reflect-metadata';
 import { Action, createExpressServer } from 'routing-controllers';
-import { UserRepository } from './repositories/userRepository';
+import { createConnection, getCustomRepository } from 'typeorm';
 import config from './configs/config';
+import { UserRepository } from './repositories/userRepository';
 
 const corsOptions = {
   origin: 'http://example.com',
@@ -15,7 +15,7 @@ const corsOptions = {
 
 const routingControllersOptions = {
   routePrefix: '/api',
-  controllers: [__dirname + '/controllers/**/*.ts'],
+  controllers: [`${__dirname}/controllers/**/*.ts`],
   // middlewares: [__dirname + "/middlewares/**/*.ts"],
   defaults: {
     nullResultCode: 404,
@@ -28,7 +28,7 @@ const routingControllersOptions = {
     // checker must return either boolean (true or false)
     // either promise that resolves a boolean value
     // demo code:
-    const token = action.request.headers['authorization'];
+    const token = action.request.headers.authorization;
     try {
       jwt.verify(token, config.jwtSecret);
     } catch (e) {

@@ -1,4 +1,6 @@
+import { hashPassword } from '@helpers';
 import { validate } from 'class-validator';
+import { injectable } from 'tsyringe';
 import {
   DeleteResult,
   getCustomRepository,
@@ -8,7 +10,6 @@ import {
 import { UserAddDto, UserUpdateDto } from '../entities/dto/userDto';
 import { User } from '../entities/user';
 import { UserRepository } from '../repositories/userRepository';
-import { injectable } from 'tsyringe';
 
 @injectable()
 export class UserService {
@@ -25,7 +26,7 @@ export class UserService {
   public async save(userDto: UserAddDto): Promise<InsertResult> {
     const user = new User();
     user.username = userDto.username;
-    user.passwordHash = userDto.password;
+    user.passwordHash = hashPassword(userDto.password);
     user.role = userDto.role;
 
     // Validade if the parameters are ok
@@ -33,10 +34,6 @@ export class UserService {
     if (errors.length > 0) {
       throw new Error(errors[0].value);
     }
-
-    // Hash the password, to securely store on DB
-    user.hashPassword();
-    // TODO: Spostare dall'entità i metodi e spostarli in una utility
 
     return await this.userRepository.add(user);
   }

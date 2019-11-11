@@ -9,9 +9,9 @@ import {
   Post,
   Put,
 } from 'routing-controllers';
+import { container } from 'tsyringe';
 import { UserAddDto, UserUpdateDto } from '../entities/dto/userDto';
 import { UserService } from '../services/userService';
-import { container } from 'tsyringe';
 
 @JsonController('/users')
 export class UserController {

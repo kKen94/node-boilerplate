@@ -1,10 +1,10 @@
-import * as bcrypt from 'bcryptjs';
 import {
   IsBoolean,
   IsDate,
   IsEmail,
   IsInt,
   IsNotEmpty,
+  IsUUID,
   Length,
 } from 'class-validator';
 import {
@@ -20,6 +20,7 @@ import {
 @Unique(['username'])
 export class User {
   @PrimaryGeneratedColumn('uuid')
+  @IsUUID()
   public id: string;
 
   @Column()
@@ -30,7 +31,13 @@ export class User {
   @Length(4, 100)
   public passwordHash: string;
 
-  @Column()
+  @Column({
+    default: new Date(
+      new Date().getFullYear(),
+      new Date().getMonth() + 3,
+      new Date().getDate(),
+    ),
+  })
   @IsDate()
   public passwordExpiration: Date;
 
@@ -73,19 +80,11 @@ export class User {
   @UpdateDateColumn()
   public updatedAt: Date;
 
-  @Column()
+  @Column({ nullable: true })
   @IsDate()
-  public lastLogin: Date;
+  public lastLogin?: Date;
 
   @Column({ default: true })
   @IsBoolean()
   public active: boolean;
-
-  public hashPassword() {
-    this.passwordHash = bcrypt.hashSync(this.passwordHash, 8);
-  }
-
-  public checkIfUnencryptedPasswordIsValid(unencryptedPassword: string) {
-    return bcrypt.compareSync(unencryptedPassword, this.passwordHash);
-  }
 }
