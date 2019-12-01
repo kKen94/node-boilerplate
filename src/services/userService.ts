@@ -29,7 +29,7 @@ export class UserService {
     user.passwordHash = hashPassword(userDto.password);
     user.role = userDto.role;
 
-    // Validade if the parameters are ok
+    // Validate if the parameters are ok
     const errors = await validate(user);
     if (errors.length > 0) {
       throw new Error(errors[0].value);

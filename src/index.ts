@@ -7,7 +7,7 @@ import * as jwt from 'jsonwebtoken';
 import * as morgan from 'morgan';
 import * as path from 'path';
 import 'reflect-metadata';
-import rotatingFileStream from 'rotating-file-stream';
+import { createStream } from 'rotating-file-stream';
 import {
   Action,
   createExpressServer,
@@ -63,7 +63,7 @@ createConnection()
     // Create express app
     const app = createExpressServer(routingControllersOptions);
 
-    const accessLogStream = rotatingFileStream('access.log', {
+    const accessLogStream = createStream('access.log', {
       interval: '1d', // rotate daily
       path: path.join(__dirname, 'log'),
     });
