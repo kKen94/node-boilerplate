@@ -1,6 +1,3 @@
-// synchronize dovrebbe tenere il database aggiornato
-// con le entità quando viene fatta partire l'applicazione
-
 export = [
   {
     environment: 'dev',
@@ -28,11 +25,11 @@ export = [
     environment: 'staging',
     name: 'staging',
     type: 'postgres',
-    host: '',
-    port: 0,
-    username: '',
-    password: '',
-    database: '',
+    host: '31.3.175.131',
+    port: 5432,
+    username: 'postgres',
+    password: 'Eagle_123',
+    database: 'postgres',
     synchronize: true,
     logging: true,
     entities: ['src/entities/**/*.ts'],
