@@ -11,8 +11,7 @@
     "interface-name": false,
     "object-literal-sort-keys": false,
     "no-console": false,
-    "no-string-literal": false,
-    "arrow-parens": false
+    "no-string-literal": false
   },
   "rulesDirectory": []
 }
