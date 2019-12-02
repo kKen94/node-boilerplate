@@ -16,7 +16,9 @@
       "baseUrl": ".",
       "rootDir": ".",
       "paths": {
-         "@helpers": ["src/helpers/index.ts"]
+         "@helper": ["src/helpers/index.ts"],
+         "@entity": ["src/entities/index.ts"],
+         "@dto": ["src/entities/dto/index.ts"]
       }
    }
 }

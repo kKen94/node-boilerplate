@@ -1,4 +1,4 @@
-import { hashPassword } from '@helpers';
+import { hashPassword } from '@helper';
 import { validate } from 'class-validator';
 import { injectable } from 'tsyringe';
 import {
@@ -15,15 +15,15 @@ import { UserRepository } from '../repositories/userRepository';
 export class UserService {
   private readonly userRepository = getCustomRepository(UserRepository);
 
-  public async getAllUsers(): Promise<User[]> {
+  public async getAllUsers(): Promise<User[] | [User[], number]> {
     return await this.userRepository.all();
   }
 
   public async getOne(id: string): Promise<User> {
-    return await this.userRepository.one(id);
+    return await this.userRepository.getById(id);
   }
 
-  public async save(userDto: UserAddDto): Promise<InsertResult> {
+  public async save(userDto: UserAddDto): Promise<User> {
     const user = new User();
     user.username = userDto.username;
     user.passwordHash = hashPassword(userDto.password);
@@ -35,14 +35,14 @@ export class UserService {
       throw new Error(errors[0].value);
     }
 
-    return await this.userRepository.add(user);
+    return await this.userRepository.addOrUpdate(user);
   }
 
   public async update(
     id: string,
     userDto: UserUpdateDto,
   ): Promise<UpdateResult> {
-    const user = await this.userRepository.one(id);
+    const user = await this.userRepository.getById(id);
     user.phoneNumber = userDto.phoneNumber;
     user.role = userDto.role;
     return await this.userRepository.update(id, user);

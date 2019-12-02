@@ -1,4 +1,4 @@
-import { hashPassword } from '@helpers';
+import { hashPassword } from '@helper';
 import { Connection } from 'typeorm';
 import { Factory, Seeder } from 'typeorm-seeding';
 import { User } from '../entities/user';
