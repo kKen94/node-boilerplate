@@ -10,6 +10,8 @@ export class FinalMiddleware implements ExpressMiddlewareInterface {
   ): any {
     if (response.headersSent || response.finished) {
       response.end();
+    } else {
+      next();
     }
   }
 }
