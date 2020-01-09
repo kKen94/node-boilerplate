@@ -15,7 +15,7 @@ import config from './configs/config';
 import { UserRepository } from './repositories/userRepository';
 
 const routingControllersOptions = {
-  routePrefix: '/api',
+  // routePrefix: '/api',
   controllers: [`${__dirname}/controllers/**/*.ts`],
   middlewares: [`${__dirname}/middlewares/**/*.ts`],
   defaults: {
@@ -48,7 +48,7 @@ const routingControllersOptions = {
 };
 
 createConnection()
-  .then(async connection => {
+  .then(async (connection) => {
     const app = createExpressServer(routingControllersOptions);
 
     // Parse class-validator classes into JSON Schema:
@@ -90,4 +90,4 @@ createConnection()
       console.log('Server started on port 3001 😎');
     });
   })
-  .catch(error => console.log(error));
+  .catch((error) => console.log(error));
