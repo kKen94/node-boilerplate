@@ -5,7 +5,7 @@ admin:
   host: localhost
 apiEndpoints:
   user-api:
-    host: localhost,
+    host: localhost
     methods: "GET,POST,PUT,DELETE"
     paths: ["/user", "/user/*"]
 serviceEndpoints:
@@ -14,10 +14,11 @@ serviceEndpoints:
 policies:
   - proxy
 pipelines:
-  default:
+  - name: user
     apiEndpoints:
       - user-api
     policies:
       - proxy:
           - action:
               serviceEndpoint: user
+              ignorePath:   true
