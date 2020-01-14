@@ -13,17 +13,11 @@
       "@commitlint/cli": "^8.2.0",
       "@commitlint/config-conventional": "^8.2.0",
       "@commitlint/prompt": "^8.2.0",
-      "@semantic-release/changelog": "^3.0.5",
-      "@semantic-release/exec": "^4.0.0",
-      "@semantic-release/git": "^8.0.0",
       "@types/node": "^12.12.14",
       "cross-env": "^6.0.3",
       "husky": "^4.0.9",
       "lint-staged": "^9.4.3",
-      "npm-run-all": "^4.1.5",
       "prettier": "^1.18.2",
-      "replace-json-property": "^1.4.1",
-      "semantic-release": "^16.0.1",
       "ts-node": "^8.5.0",
       "ts-node-dev": "^1.0.0-pre.43",
       "tsconfig-paths": "^3.9.0",
@@ -68,15 +62,12 @@
       "copy:files": "yarn run copy:readme && yarn run copy:conduct",
       "copy:readme": "copyfiles ./README.md ./dist/lib",
       "copy:conduct": "copyfiles ./CODE_OF_CONDUCT.md ./dist/lib",
-      "adjust-version": "npm-run-all adjust-version:*",
-      "adjust-version:lib": "rjp projects/lib/package.json version $VERSION",
-      "adjust-version:main": "rjp package.json version $VERSION",
       "format:check": "prettier --list-different \"src/**/*.{ts,tsx}\"",
       "format:write": "prettier --write \"src/**/*.{ts,tsx}\""
    },
    "husky": {
       "hooks": {
-         "pre-commit": "npx semantic-release && lint-staged",
+         "pre-commit": "lint-staged",
          "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
       }
    },
