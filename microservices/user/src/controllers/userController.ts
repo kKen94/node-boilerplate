@@ -15,7 +15,7 @@ import { container } from 'tsyringe';
 import { DeleteResult, InsertResult, UpdateResult } from 'typeorm';
 import { UserService } from '../services/userService';
 
-@JsonController('/users')
+@JsonController('/')
 export class UserController {
   private readonly userService: UserService;
 
