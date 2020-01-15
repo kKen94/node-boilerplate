@@ -31,13 +31,8 @@ export class User {
   @Length(4, 100)
   public passwordHash: string;
 
-  @Column({
-    default: new Date(
-      new Date().getFullYear(),
-      new Date().getMonth() + 3,
-      new Date().getDate(),
-    ),
-  })
+  // TODO: trovare il modo di settare 3 mesi di default come valore sql
+  @Column()
   @IsDate()
   public passwordExpiration: Date;
 
@@ -68,21 +63,34 @@ export class User {
   @IsBoolean()
   public twoFactorEnabled: boolean;
 
+  @Column({ default: false })
+  @IsBoolean()
+  public deleted: boolean;
+
+  // TODO: deve diventare una relazione
   @Column()
   @IsNotEmpty()
   public role: string;
 
   @Column()
-  @CreateDateColumn()
+  @CreateDateColumn({ update: false })
   public createdAt: Date;
 
   @Column()
-  @UpdateDateColumn()
+  @UpdateDateColumn({ update: false })
   public updatedAt: Date;
 
   @Column({ nullable: true })
   @IsDate()
   public lastLogin?: Date;
+
+  @Column({ nullable: true })
+  @IsDate()
+  public activeFrom?: Date;
+
+  @Column({ nullable: true })
+  @IsDate()
+  public activeTo?: Date;
 
   @Column({ default: true })
   @IsBoolean()

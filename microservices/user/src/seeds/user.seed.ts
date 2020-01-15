@@ -17,7 +17,7 @@ export default class CreateUsers implements Seeder {
 const users = [
   {
     role: 'ADMIN',
-    passwordHash: hashPassword('Cola_123'),
+    passwordHash: hashPassword('Cola_123'), // TODO: questa cosa qui non ci deve stare
     username: 'tadde',
     email: 'nicola.taddei.94@gmail.com',
     emailConfirmed: true,

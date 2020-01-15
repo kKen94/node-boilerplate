@@ -1,25 +1,28 @@
-import { LoginRequestDto } from '@dto';
+import { LoginRequestDto, LoginResponseDto } from '@dto';
 import { User } from '@entity';
-import { checkIfUnencryptedPasswordIsValid } from '@helper';
-import * as jwt from 'jsonwebtoken';
+import { checkIfUnencryptedPasswordIsValid, generateToken } from '@helper';
 import { NotFoundError, UnauthorizedError } from 'routing-controllers';
+import { Error } from 'tslint/lib/error';
 import { injectable } from 'tsyringe';
-import { getCustomRepository } from 'typeorm';
-import config from '../configs/config';
+import { getCustomRepository, UpdateResult } from 'typeorm';
 import { UserRepository } from '../repositories/userRepository';
 
 @injectable()
 export class AuthService {
   private readonly userRepository = getCustomRepository(UserRepository);
 
-  public async login(loginDto: LoginRequestDto): Promise<string> {
+  public async login(loginDto: LoginRequestDto): Promise<LoginResponseDto> {
     let user: User;
     try {
-      user = await this.userRepository.one({
+      user = await this.userRepository.findOne({
         where: { username: loginDto.username },
       });
     } catch (error) {
-      throw new NotFoundError(`User was not found.`);
+      throw new NotFoundError(`User not found`);
+    }
+
+    if (user.deleted) {
+      throw new NotFoundError(`User not found`);
     }
 
     //  Check if encrypted password match
@@ -29,11 +32,39 @@ export class AuthService {
       throw new UnauthorizedError('Password wrong');
     }
 
-    //  Sing JWT, valid for 1 hour
-    return jwt.sign(
-      { userId: user.id, username: user.username },
-      config.jwtSecret,
-      { expiresIn: '1h' },
+    if (!user.emailConfirmed) {
+      throw new Error('Email not confirmed');
+    }
+
+    const validateActiveDate =
+      (user.activeFrom <= new Date() || !user.activeFrom) &&
+      (user.activeTo > new Date() || !user.activeTo);
+
+    if (!validateActiveDate || !user.active) {
+      throw new Error('User not active');
+    }
+
+    const resetPassword =
+      user.passwordExpiration <= new Date() || user.forceResetPassword;
+
+    if (resetPassword) {
+      return new LoginResponseDto(null, null, null, null, true);
+    }
+
+    //  Sign JWT, valid for 1 hour
+    const token = generateToken(user);
+    await this.updateLastLogin(user);
+    return new LoginResponseDto(
+      user.id,
+      user.email,
+      user.username,
+      token,
+      false,
     );
+  }
+
+  private async updateLastLogin(user: User): Promise<UpdateResult> {
+    user.lastLogin = new Date();
+    return await this.userRepository.update(user.id, user);
   }
 }

@@ -1,14 +1,9 @@
+import { UserAddDto, UserUpdateDto } from '@dto';
+import { User } from '@entity';
 import { hashPassword } from '@helper';
 import { validate } from 'class-validator';
 import { injectable } from 'tsyringe';
-import {
-  DeleteResult,
-  getCustomRepository,
-  InsertResult,
-  UpdateResult,
-} from 'typeorm';
-import { UserAddDto, UserUpdateDto } from '../entities/dto/userDto';
-import { User } from '../entities/user';
+import { DeleteResult, getCustomRepository, UpdateResult } from 'typeorm';
 import { UserRepository } from '../repositories/userRepository';
 
 @injectable()

@@ -27,23 +27,24 @@ const routingControllersOptions = {
   },
   authorizationChecker: async (action: Action, roles: string[]) => {
     const token = action.request.headers['authorization'];
-
+    let decoded;
     try {
-      jwt.verify(token, config.jwtSecret);
+      decoded = jwt.verify(token, config.jwtSecret);
     } catch (e) {
       return false;
     }
 
     if (roles.length) {
       const userRepository = getCustomRepository(UserRepository);
-      const user = await userRepository.findOneByToken(token);
+      const user = await userRepository.getById(decoded['id']);
       return roles.includes(user.role);
     }
   },
   currentUserChecker: async (action: Action) => {
     const token = action.request.headers['authorization'];
+    const decoded = jwt.decode(token);
     const userRepository = getCustomRepository(UserRepository);
-    return await userRepository.findOneByToken(token);
+    return await userRepository.getById(decoded['id']);
   },
 };
 

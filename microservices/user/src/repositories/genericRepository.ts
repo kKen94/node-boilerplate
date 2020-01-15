@@ -19,7 +19,7 @@ export class GenericRepository<T> extends AbstractRepository<T> {
       : await this.repository.find(options);
   }
 
-  public async one(
+  public async findOne(
     options: FindOneOptions<T>,
     conditions?: FindConditions<T>,
   ): Promise<T> {

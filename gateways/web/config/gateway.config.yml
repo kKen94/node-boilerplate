@@ -7,7 +7,7 @@ apiEndpoints:
   user-api:
     host: localhost
     methods: "GET,POST,PUT,DELETE"
-    paths: ["/user", "/user/*"]
+    paths: ["/users", "/users/*"]
 serviceEndpoints:
   user:
     url: "http://localhost:3001"
