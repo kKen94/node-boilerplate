@@ -21,4 +21,6 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: user
-              ignorePath:   true
+              ignorePath:   false
+              prependPath:   true
+              stripPath:   true

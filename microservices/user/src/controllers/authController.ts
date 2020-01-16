@@ -1,5 +1,11 @@
 import { LoginRequestDto, LoginResponseDto } from '@dto';
-import { Body, HttpCode, JsonController, Post } from 'routing-controllers';
+import {
+  Authorized,
+  Body,
+  HttpCode,
+  JsonController,
+  Post,
+} from 'routing-controllers';
 import { container } from 'tsyringe';
 import { AuthService } from '../services/authService';
 
