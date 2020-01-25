@@ -13,7 +13,7 @@ import {
 } from 'routing-controllers';
 import { container } from 'tsyringe';
 import { DeleteResult, InsertResult, UpdateResult } from 'typeorm';
-import { UserService } from '../services/userService';
+import { UserService } from '../services/user-service';
 
 @JsonController('/')
 export class UserController {
@@ -49,8 +49,8 @@ export class UserController {
   public async update(
     @Param('id') id: string,
     @Body() userDto: UserUpdateDto,
-  ): Promise<UpdateResult> {
-    return await this.userService.update(id, userDto);
+  ): Promise<void> {
+    await this.userService.update(id, userDto);
   }
 
   @Authorized()

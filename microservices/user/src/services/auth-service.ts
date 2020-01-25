@@ -5,7 +5,7 @@ import { NotFoundError, UnauthorizedError } from 'routing-controllers';
 import { Error } from 'tslint/lib/error';
 import { injectable } from 'tsyringe';
 import { getCustomRepository, UpdateResult } from 'typeorm';
-import { UserRepository } from '../repositories/userRepository';
+import { UserRepository } from '../repositories/user-repository';
 
 @injectable()
 export class AuthService {

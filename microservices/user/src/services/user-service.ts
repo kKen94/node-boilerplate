@@ -4,7 +4,7 @@ import { hashPassword } from '@helper';
 import { validate } from 'class-validator';
 import { injectable } from 'tsyringe';
 import { DeleteResult, getCustomRepository, In, UpdateResult } from 'typeorm';
-import { UserRepository } from '../repositories/userRepository';
+import { UserRepository } from '../repositories/user-repository';
 import { Permission } from '../entities/permission';
 import { options } from 'tsconfig-paths/lib/options';
 import { PermissionRepository } from '../repositories/permission-repository';

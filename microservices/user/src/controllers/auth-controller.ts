@@ -7,7 +7,7 @@ import {
   Post,
 } from 'routing-controllers';
 import { container } from 'tsyringe';
-import { AuthService } from '../services/authService';
+import { AuthService } from '../services/auth-service';
 
 @JsonController('/auth')
 export class AuthController {

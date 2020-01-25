@@ -3,7 +3,6 @@ import {
   IsDate,
   IsEmail,
   IsInt,
-  IsNotEmpty,
   IsUUID,
   Length,
 } from 'class-validator';
@@ -11,10 +10,15 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
+import { PasswordHistory } from './password-history';
+import { Permission } from './permission';
 
 @Entity()
 @Unique(['username'])
@@ -67,11 +71,6 @@ export class User {
   @IsBoolean()
   public deleted: boolean;
 
-  // TODO: deve diventare una relazione
-  @Column()
-  @IsNotEmpty()
-  public role: string;
-
   @Column()
   @CreateDateColumn({ update: false })
   public createdAt: Date;
@@ -95,4 +94,18 @@ export class User {
   @Column({ default: true })
   @IsBoolean()
   public active: boolean;
+
+  @OneToMany(
+    () => PasswordHistory,
+    (passwordHistory) => passwordHistory.user,
+  )
+  // @OneToMany(() => PasswordHistory, passwordHistory => passwordHistory.user, {eager: true}) Le carica subito
+  public passwordHistories: PasswordHistory[];
+  // public passwordHistories: Promise<PasswordHistory[]>; LAZY LOADING
+
+  @ManyToMany(() => Permission)
+  @JoinTable()
+  public permissions: Permission[];
+
+  // TODO: mettere i lazy loading?
 }

@@ -4,8 +4,8 @@ import * as jwt from 'jsonwebtoken';
 import config from '../configs/config';
 
 export const generateToken = (user: User): string => {
-  // TODO: prendere i permessi dell'utente
-  const permissions = [user.role];
+  // TODO: controllare che effettivamente ci siano
+  const permissions = user.permissions.map((permission) => permission.name);
 
   return jwt.sign(
     {

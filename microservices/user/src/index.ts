@@ -12,7 +12,7 @@ import * as swStats from 'swagger-stats';
 import * as swaggerUI from 'swagger-ui-express';
 import { createConnection, getCustomRepository } from 'typeorm';
 import config from './configs/config';
-import { UserRepository } from './repositories/userRepository';
+import { UserRepository } from './repositories/user-repository';
 
 const routingControllersOptions = {
   // routePrefix: '/api',
@@ -25,7 +25,10 @@ const routingControllersOptions = {
       required: true,
     },
   },
-  authorizationChecker: async (action: Action, roles: string[]) => {
+  authorizationChecker: async (
+    action: Action,
+    requestPermissions: string[],
+  ) => {
     const token = action.request.headers['authorization'];
     let decoded;
     try {
@@ -34,10 +37,14 @@ const routingControllersOptions = {
       return false;
     }
 
-    if (roles.length) {
+    if (requestPermissions.length) {
       const userRepository = getCustomRepository(UserRepository);
       const user = await userRepository.getById(decoded['id']);
-      return roles.includes(user.role);
+      return requestPermissions.every((requestPermission) =>
+        user.permissions
+          .map((permission) => permission.name)
+          .includes(requestPermission),
+      );
     }
   },
   currentUserChecker: async (action: Action) => {
@@ -91,4 +98,6 @@ createConnection()
       console.log('Server started on port 3001 😎');
     });
   })
-  .catch((error) => console.log(error));
+  .catch((error) => {
+    console.log(error);
+  });
