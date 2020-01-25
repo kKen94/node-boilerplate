@@ -1,10 +1,10 @@
 export interface UserAddDto {
   password: string;
   username: string;
-  role: string;
+  permissionsId: string[];
 }
 
 export interface UserUpdateDto {
   phoneNumber: string;
-  role: string;
+  permissionsId: string[];
 }

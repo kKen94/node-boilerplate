@@ -8,15 +8,19 @@ import {
   UpdateResult,
 } from 'typeorm';
 import { SaveOptions } from 'typeorm/repository/SaveOptions';
+import { deprecate } from 'util';
 
 export class GenericRepository<T> extends AbstractRepository<T> {
-  public async all(
-    count = false,
+  public async find(
     options?: FindManyOptions<T> | FindConditions<T>,
-  ): Promise<T[] | [T[], number]> {
-    return count
-      ? await this.repository.findAndCount(options)
-      : await this.repository.find(options);
+  ): Promise<T[]> {
+    return await this.repository.find(options);
+  }
+
+  public async findAndCount(
+    options?: FindManyOptions<T> | FindConditions<T>,
+  ): Promise<[T[], number]> {
+    return await this.repository.findAndCount(options);
   }
 
   public async findOne(
@@ -41,6 +45,7 @@ export class GenericRepository<T> extends AbstractRepository<T> {
    * Executes fast and efficient INSERT query.
    * Does not check if entity exist in the database, so query will fail if duplicate entity is being inserted.
    */
+  /** @deprecated */
   public async insert(entity: T): Promise<InsertResult> {
     return await this.repository.insert(entity);
   }
@@ -51,6 +56,7 @@ export class GenericRepository<T> extends AbstractRepository<T> {
    * Executes fast and efficient UPDATE query.
    * Does not check if entity exist in the database.
    */
+  /** @deprecated */
   public async update<TKey>(id: TKey, entity: T): Promise<UpdateResult> {
     return await this.repository.update(id, entity);
   }

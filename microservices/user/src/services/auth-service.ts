@@ -63,6 +63,10 @@ export class AuthService {
     );
   }
 
+  public async signUp(): Promise<any> {
+    // TODO: creare utente e company
+  }
+
   private async updateLastLogin(user: User): Promise<UpdateResult> {
     user.lastLogin = new Date();
     return await this.userRepository.update(user.id, user);
