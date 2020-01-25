@@ -1,4 +1,4 @@
-import { IsBoolean, IsDate, IsEmail, IsInt, IsUUID, Length } from 'class-validator';
+import { IsBoolean, IsDate, IsEmail, IsInt, IsNotEmpty, IsUUID, Length } from 'class-validator';
 import {
   Column,
   CreateDateColumn,
@@ -14,7 +14,7 @@ import { PasswordHistory } from './password-history';
 import { Permission } from './permission';
 
 @Entity()
-@Unique(['username'])
+@Unique(['username', 'email'])
 export class User {
   @PrimaryGeneratedColumn('uuid')
   @IsUUID()
@@ -25,16 +25,17 @@ export class User {
   public username: string;
 
   @Column()
+  @IsNotEmpty()
   @Length(4, 100)
   public passwordHash: string;
 
   @Column({ default: () => `localtimestamp + interval '3 month'` })
   @IsDate()
-  public passwordExpiration: Date;
+  public passwordExpiration?: Date;
 
   @Column({ default: 3 })
   @IsInt()
-  public passwordHistoryLimit: number;
+  public passwordHistoryLimit?: number;
 
   @Column({ default: false })
   @IsBoolean()
@@ -91,10 +92,12 @@ export class User {
     () => PasswordHistory,
     passwordHistory => passwordHistory.user,
   )
-  public passwordHistories: PasswordHistory[];
-  // public passwordHistories: Promise<PasswordHistory[]>; LAZY LOADING
+  public passwordHistories: Promise<PasswordHistory[]>;
 
-  @ManyToMany(() => Permission)
+  @ManyToMany(
+    () => Permission,
+    permission => permission.users,
+  )
   @JoinTable()
-  public permissions: Permission[];
+  public permissions: Promise<Permission[]>;
 }

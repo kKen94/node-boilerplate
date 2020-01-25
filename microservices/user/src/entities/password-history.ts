@@ -1,12 +1,5 @@
 import { IsNotEmpty, IsUUID, Length } from 'class-validator';
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  Unique,
-} from 'typeorm';
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { User } from './user';
 
 @Entity()
@@ -26,7 +19,7 @@ export class PasswordHistory {
 
   @ManyToOne(
     () => User,
-    (user) => user.passwordHistories,
+    user => user.passwordHistories,
   )
-  public user: User;
+  public user: Promise<User>;
 }
