@@ -35,8 +35,7 @@ export class User {
   @Length(4, 100)
   public passwordHash: string;
 
-  // TODO: trovare il modo di settare 3 mesi di default come valore sql
-  @Column()
+  @Column({ default: () => `localtimestamp + interval '3 month'` })
   @IsDate()
   public passwordExpiration: Date;
 
