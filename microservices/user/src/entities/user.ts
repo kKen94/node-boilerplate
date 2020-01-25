@@ -1,11 +1,4 @@
-import {
-  IsBoolean,
-  IsDate,
-  IsEmail,
-  IsInt,
-  IsUUID,
-  Length,
-} from 'class-validator';
+import { IsBoolean, IsDate, IsEmail, IsInt, IsUUID, Length } from 'class-validator';
 import {
   Column,
   CreateDateColumn,
@@ -96,15 +89,12 @@ export class User {
 
   @OneToMany(
     () => PasswordHistory,
-    (passwordHistory) => passwordHistory.user,
+    passwordHistory => passwordHistory.user,
   )
-  // @OneToMany(() => PasswordHistory, passwordHistory => passwordHistory.user, {eager: true}) Le carica subito
   public passwordHistories: PasswordHistory[];
   // public passwordHistories: Promise<PasswordHistory[]>; LAZY LOADING
 
   @ManyToMany(() => Permission)
   @JoinTable()
   public permissions: Permission[];
-
-  // TODO: mettere i lazy loading?
 }
