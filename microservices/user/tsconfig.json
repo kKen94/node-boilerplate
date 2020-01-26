@@ -17,8 +17,8 @@
       "rootDir": ".",
       "paths": {
          "@helper": ["src/helpers/index.ts"],
-         "@entity": ["src/entities/index.ts"],
-         "@dto": ["src/entities/dto/index.ts"]
+         "@entity": ["src/models/index.ts"],
+         "@dto": ["src/models/dto/index.ts"]
       }
    }
 }

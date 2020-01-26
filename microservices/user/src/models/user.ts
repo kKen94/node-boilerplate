@@ -14,15 +14,11 @@ import { PasswordHistory } from './password-history';
 import { Permission } from './permission';
 
 @Entity()
-@Unique(['username', 'email'])
+@Unique(['email'])
 export class User {
   @PrimaryGeneratedColumn('uuid')
   @IsUUID()
   public id: string;
-
-  @Column()
-  @Length(5, 20)
-  public username: string;
 
   @Column()
   @IsNotEmpty()

@@ -16,11 +16,8 @@ export default class CreateUsers implements Seeder {
 
 const users = [
   {
-    permissions: [
-      { name: 'SUPER.ADMIN', description: 'Root admin over app admin' },
-    ],
+    permissions: Promise.resolve([{ name: 'SUPER.ADMIN', description: 'Root admin over app admin' }]),
     passwordHash: hashPassword('Cola_123'), // TODO: questa cosa qui non ci deve stare
-    username: 'tadde',
     email: 'nicola.taddei.94@gmail.com',
     emailConfirmed: true,
   },
