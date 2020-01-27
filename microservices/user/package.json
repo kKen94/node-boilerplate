@@ -24,7 +24,6 @@
       "tslint": "^5.20.0",
       "tslint-config-airbnb": "^5.11.2",
       "tslint-config-prettier": "^1.18.0",
-      "typeorm-seeding": "betiol/typeorm-seeding",
       "typescript": "^3.7.2"
    },
    "dependencies": {
@@ -85,6 +84,6 @@
    "private": true,
    "repository": {
       "type": "git",
-      "url": "https://github.com/kKen94/eagle-api.git"
+      "url": "https://github.com/t2c-dev/api.git"
    }
 }

@@ -11,31 +11,21 @@ import { SaveOptions } from 'typeorm/repository/SaveOptions';
 import { deprecate } from 'util';
 
 export class GenericRepository<T> extends AbstractRepository<T> {
-  public async find(
-    options?: FindManyOptions<T> | FindConditions<T>,
-  ): Promise<T[]> {
+  public async find(options?: FindManyOptions<T> | FindConditions<T>): Promise<T[]> {
     return await this.repository.find(options);
   }
 
-  public async findAndCount(
-    options?: FindManyOptions<T> | FindConditions<T>,
-  ): Promise<[T[], number]> {
+  public async findAndCount(options?: FindManyOptions<T> | FindConditions<T>): Promise<[T[], number]> {
     return await this.repository.findAndCount(options);
   }
 
-  public async findOne(
-    options: FindOneOptions<T>,
-    conditions?: FindConditions<T>,
-  ): Promise<T> {
+  public async findOne(options: FindOneOptions<T>, conditions?: FindConditions<T>): Promise<T> {
     return conditions
       ? await this.repository.findOneOrFail(conditions, options)
       : await this.repository.findOneOrFail(options);
   }
 
-  public async getById<TKey>(
-    id: TKey,
-    options?: FindOneOptions<T>,
-  ): Promise<T> {
+  public async getById<TKey>(id: TKey, options?: FindOneOptions<T>): Promise<T> {
     return await this.repository.findOneOrFail(id, options);
   }
 
@@ -65,20 +55,15 @@ export class GenericRepository<T> extends AbstractRepository<T> {
     return await this.repository.save(entity, options);
   }
 
-  public async addOrUpdateRange(
-    entities: T[],
-    options: SaveOptions,
-  ): Promise<T[]> {
-    return await this.repository.save(entities);
+  public async addOrUpdateRange(entities: T[], options?: SaveOptions): Promise<T[]> {
+    return await this.repository.save(entities, options);
   }
 
   public async delete<TKey>(entityId: TKey): Promise<DeleteResult> {
     return await this.repository.delete(entityId);
   }
 
-  public async deleteRange(
-    entitiesId: string[] | number[],
-  ): Promise<DeleteResult> {
+  public async deleteRange(entitiesId: string[] | number[]): Promise<DeleteResult> {
     return await this.repository.delete(entitiesId);
   }
 }

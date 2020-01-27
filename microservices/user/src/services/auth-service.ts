@@ -41,7 +41,7 @@ export class AuthService {
       throw new Error('User not active');
     }
 
-    const resetPassword = user.passwordExpiration <= new Date() || user.forceResetPassword;
+    const resetPassword = (user.passwordExpiration && user.passwordExpiration <= new Date()) || user.forceResetPassword;
 
     if (resetPassword) {
       return new LoginResponseDto(null, null, null, true);

@@ -9,6 +9,7 @@ import * as swaggerUI from 'swagger-ui-express';
 import { createConnection, getCustomRepository } from 'typeorm';
 import config from './configs/config';
 import { UserRepository } from './repositories/user-repository';
+import { seed } from './seeds/seed';
 
 const routingControllersOptions = {
   // routePrefix: '/api',
@@ -48,7 +49,7 @@ const routingControllersOptions = {
 };
 
 createConnection()
-  .then(async () => {
+  .then(async connection => {
     const app = createExpressServer(routingControllersOptions);
 
     // Parse class-validator classes into JSON Schema:
@@ -79,7 +80,8 @@ createConnection()
     app.use('/swagger', swaggerUI.serve, swaggerUI.setup(spec));
     app.use(swStats.getMiddleware({ swaggerSpec: spec, name: 'swagger-stats-test' }));
 
-    app.listen(3001, () => {
+    app.listen(3001, async () => {
+      await seed(connection);
       console.log('Server started on port 3001 😎');
     });
   })
