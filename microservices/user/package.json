@@ -49,9 +49,6 @@
       "typeorm": "^0.2.20"
    },
    "scripts": {
-      "build:staging": "cross-env NODE_ENV=staging tsc",
-      "build:prod": "cross-env NODE_ENV=prod tsc",
-      "build": "cross-env NODE_ENV=dev tsc",
       "start": "set debug=* && cross-env NODE_ENV=dev ts-node-dev --respawn --transpileOnly -r tsconfig-paths/register ./src/index.ts",
       "add:migration": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:generate -n",
       "update:database": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run",
@@ -62,7 +59,11 @@
       "copy:readme": "copyfiles ./README.md ./dist/lib",
       "copy:conduct": "copyfiles ./CODE_OF_CONDUCT.md ./dist/lib",
       "format:check": "prettier --list-different \"src/**/*.{ts,tsx}\"",
-      "format:write": "prettier --write \"src/**/*.{ts,tsx}\""
+      "format:write": "prettier --write \"src/**/*.{ts,tsx}\"",
+      "docker:start": "cross-env NODE_ENV=${APP_ENV} ts-node -r tsconfig-paths/register ./src/index.ts",
+      "docker:build:dev": "docker build --no-cache -t user.api:latest .",
+      "docker:build:staging": "docker build --no-cache -t user.api:latest --build-arg APP_ENV=staging .",
+      "docker:build:prod": "docker build --no-cache -t user.api:latest --build-arg APP_ENV=prod ."
    },
    "husky": {
       "hooks": {
