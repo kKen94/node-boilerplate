@@ -22,5 +22,5 @@ export class Permission {
     () => User,
     user => user.permissions,
   )
-  public users: Promise<User[]>;
+  public users: User[];
 }

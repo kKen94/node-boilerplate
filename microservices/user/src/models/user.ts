@@ -88,12 +88,12 @@ export class User {
     () => PasswordHistory,
     passwordHistory => passwordHistory.user,
   )
-  public passwordHistories: Promise<PasswordHistory[]>;
+  public passwordHistories: PasswordHistory[];
 
   @ManyToMany(
     () => Permission,
     permission => permission.users,
   )
   @JoinTable()
-  public permissions: Promise<Permission[]>;
+  public permissions: Permission[];
 }

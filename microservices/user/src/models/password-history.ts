@@ -21,5 +21,5 @@ export class PasswordHistory {
     () => User,
     user => user.passwordHistories,
   )
-  public user: Promise<User>;
+  public user: User;
 }

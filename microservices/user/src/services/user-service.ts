@@ -23,11 +23,9 @@ export class UserService {
   public async save(userDto: UserAddDto): Promise<User> {
     const user = new User();
     user.passwordHash = hashPassword(userDto.password);
-    user.permissions = Promise.resolve(
-      await this.permissionRepository.find({
-        id: In(userDto.permissionsId),
-      }),
-    );
+    user.permissions = await this.permissionRepository.find({
+      id: In(userDto.permissionsId),
+    });
 
     // Validate if the parameters are ok
     const errors = await validate(user);
@@ -41,11 +39,9 @@ export class UserService {
   public async update(id: string, userDto: UserUpdateDto): Promise<void> {
     const user = await this.userRepository.getById(id);
     user.phoneNumber = userDto.phoneNumber;
-    user.permissions = Promise.resolve(
-      await this.permissionRepository.find({
-        id: In(userDto.permissionsId),
-      }),
-    );
+    user.permissions = await this.permissionRepository.find({
+      id: In(userDto.permissionsId),
+    });
     await this.userRepository.addOrUpdate(user);
   }
 
