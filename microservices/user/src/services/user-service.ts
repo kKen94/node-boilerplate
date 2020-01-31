@@ -3,14 +3,15 @@ import { User } from '@entity';
 import { hashPassword } from '@helper';
 import { validate } from 'class-validator';
 import { injectable } from 'tsyringe';
-import { DeleteResult, getCustomRepository, In } from 'typeorm';
+import { DeleteResult, In } from 'typeorm';
+import { getRepo } from '../helpers/connection';
 import { PermissionRepository } from '../repositories/permission-repository';
 import { UserRepository } from '../repositories/user-repository';
 
 @injectable()
 export class UserService {
-  private readonly userRepository = getCustomRepository(UserRepository);
-  private readonly permissionRepository = getCustomRepository(PermissionRepository);
+  private readonly userRepository = getRepo(UserRepository);
+  private readonly permissionRepository = getRepo(PermissionRepository);
 
   public async getAllUsers(): Promise<User[] | [User[], number]> {
     return await this.userRepository.find();

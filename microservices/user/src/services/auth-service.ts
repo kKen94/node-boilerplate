@@ -1,23 +1,20 @@
-import { LoginRequestDto, LoginResponseDto } from '@dto';
+import { LoginRequestDto, LoginResponseDto, SignUpRequestDto } from '@dto';
 import { User } from '@entity';
 import { checkIfUnencryptedPasswordIsValid, generateToken } from '@helper';
 import { NotFoundError, UnauthorizedError } from 'routing-controllers';
 import { Error } from 'tslint/lib/error';
 import { injectable } from 'tsyringe';
-import { getCustomRepository } from 'typeorm';
+import { getRepo } from '../helpers/connection';
 import { UserRepository } from '../repositories/user-repository';
-import { SignUpRequestDto } from '../models/dto/signup-dto';
 
 @injectable()
 export class AuthService {
-  private readonly userRepository = getCustomRepository(UserRepository);
+  private readonly userRepository = getRepo(UserRepository);
 
   public async login(loginDto: LoginRequestDto): Promise<LoginResponseDto> {
     let user: User;
     try {
-      user = await this.userRepository.findOne({
-        where: { username: loginDto.username },
-      });
+      user = await this.userRepository.userByEmailWithPermissions(loginDto.email);
     } catch (error) {
       throw new NotFoundError(`User not found`);
     }
