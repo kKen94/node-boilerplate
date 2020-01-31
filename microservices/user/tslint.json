@@ -16,7 +16,7 @@
     "no-console": false,
     "no-string-literal": false,
     "no-trailing-whitespace": false,
-    "arrow-parens": [true, "ban-single-arg-parens"]
+    "ter-arrow-parens": [true, "as-needed"]
   },
   "rulesDirectory": []
 }

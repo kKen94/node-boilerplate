@@ -6,8 +6,9 @@ import { Action, createExpressServer, getMetadataArgsStorage } from 'routing-con
 import { routingControllersToSpec } from 'routing-controllers-openapi';
 import * as swStats from 'swagger-stats';
 import * as swaggerUI from 'swagger-ui-express';
-import { createConnection, getCustomRepository } from 'typeorm';
+import { createConnection } from 'typeorm';
 import config from './configs/config';
+import { getRepo } from './helpers/connection';
 import { UserRepository } from './repositories/user-repository';
 import { seed } from './seeds/seed';
 
@@ -32,23 +33,22 @@ const routingControllersOptions = {
     }
 
     if (requestPermissions.length) {
-      const userRepository = getCustomRepository(UserRepository);
-      const user = await userRepository.getById(decoded['id']);
-      const userPermissions = await user.permissions;
+      const userRepository = getRepo(UserRepository);
+      const user = await userRepository.userByIdWithPermissions(decoded['id']);
       return requestPermissions.every(requestPermission =>
-        userPermissions.map(permission => permission.name).includes(requestPermission),
+        user.permissions.map(permission => permission.name).includes(requestPermission),
       );
     }
   },
   currentUserChecker: async (action: Action) => {
     const token = action.request.headers['authorization'];
     const decoded = jwt.decode(token);
-    const userRepository = getCustomRepository(UserRepository);
+    const userRepository = getRepo(UserRepository);
     return await userRepository.getById(decoded['id']);
   },
 };
 
-createConnection()
+createConnection(process.env.NODE_ENV)
   .then(async connection => {
     const app = createExpressServer(routingControllersOptions);
 
