@@ -49,10 +49,10 @@
       "typeorm": "^0.2.20"
    },
    "scripts": {
-      "start": "set debug=* && cross-env NODE_ENV=dev DB_SYNC=false DB_URL=postgresql://postgres:postgres@localhost:5432/user ts-node-dev --respawn --transpileOnly -r tsconfig-paths/register ./src/index.ts",
+      "start": "set debug=* && cross-env NODE_ENV=dev ts-node-dev --respawn --transpileOnly -r tsconfig-paths/register ./src/index.ts",
+      "start:docker": "docker-compose up",
       "add:migration": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:generate -n",
       "update:database": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run",
-      "seed": "ts-node -r tsconfig-paths/register ./node_modules/typeorm-seeding/dist/cli.js seed --config ormconfig.ts",
       "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm",
       "tslint": "tslint --project tsconfig.json",
       "copy:files": "yarn run copy:readme && yarn run copy:conduct",
@@ -60,10 +60,9 @@
       "copy:conduct": "copyfiles ./CODE_OF_CONDUCT.md ./dist/lib",
       "format:check": "prettier --list-different \"src/**/*.{ts,tsx}\"",
       "format:write": "prettier --write \"src/**/*.{ts,tsx}\"",
-      "docker:start": "cross-env NODE_ENV=$APP_ENV ts-node -r tsconfig-paths/register ./src/index.ts",
-      "docker:build:dev": "docker build --no-cache -t user.api-dev:latest .",
-      "docker:build:staging": "docker build --no-cache -t user.api-staging:latest --build-arg APP_ENV=staging --build-arg DB_SYNC=true --build-arg DB_URL=postgres://kleqlggk:XMMZZWS_9Ec4E1_3n9hNAxAn76MOJqxS@rogue.db.elephantsql.com:5432/kleqlggk .",
-      "docker:build:prod": "docker build --no-cache -t user.api-prod:latest --build-arg APP_ENV=prod --build-arg DB_URL=dainserire ."
+      "dockerfile:cmd": "cross-env NODE_ENV=$APP_ENV ts-node -r tsconfig-paths/register ./src/index.ts",
+      "docker:build:staging": "docker-compose -f docker-compose.staging.yml build --no-cache",
+      "docker:build:prod": "docker-compose -f docker-compose.prod.yml build --no-cache"
    },
    "husky": {
       "hooks": {

@@ -1,0 +1,23 @@
+version: '3.7'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP_ENV=dev
+        - DB_SYNC=true
+        - DB_URL=postgresql://postgres:postgres@postgres_dev:5432/user
+    depends_on:
+      - postgres_dev
+    ports:
+      - "3001:3001"
+    container_name: user.api_dev
+
+  postgres_dev:
+    image: postgres:11.5
+    container_name: postgres_dev
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=user

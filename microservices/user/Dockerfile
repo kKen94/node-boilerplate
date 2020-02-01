@@ -1,12 +1,12 @@
 FROM node:12
 
-ARG APP_ENV=dev
+ARG APP_ENV
 ENV APP_ENV=${APP_ENV}
 
-ARG DB_URL=postgresql://postgres:postgres@postgres:5432/user
+ARG DB_URL
 ENV DB_URL=${DB_URL}
 
-ARG DB_SYNC=false
+ARG DB_SYNC
 ENV DB_SYNC=${DB_SYNC}
 
 WORKDIR /usr/src/app
@@ -19,4 +19,4 @@ RUN yarn
 COPY . .
 
 EXPOSE 3001
-CMD [ "yarn", "run", "docker:start" ]
+CMD [ "yarn", "run", "dockerfile:cmd" ]
