@@ -1,0 +1,11 @@
+version: '3.7'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP_ENV=staging
+        - DB_SYNC=true
+        - DB_URL=postgres://kleqlggk:XMMZZWS_9Ec4E1_3n9hNAxAn76MOJqxS@rogue.db.elephantsql.com:5432/kleqlggk
