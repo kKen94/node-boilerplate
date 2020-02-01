@@ -1,3 +1,6 @@
+import { jwtEagle } from '@config';
+import { getRepo } from '@helper';
+import { UserRepository } from '@repository';
 import { getFromContainer, MetadataStorage } from 'class-validator';
 import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
 import * as jwt from 'jsonwebtoken';
@@ -7,9 +10,6 @@ import { routingControllersToSpec } from 'routing-controllers-openapi';
 import * as swStats from 'swagger-stats';
 import * as swaggerUI from 'swagger-ui-express';
 import { createConnection } from 'typeorm';
-import config from './configs/config';
-import { getRepo } from './helpers/connection';
-import { UserRepository } from './repositories/user-repository';
 import { seed } from './seeds/seed';
 
 const routingControllersOptions = {
@@ -27,7 +27,7 @@ const routingControllersOptions = {
     const token = action.request.headers['authorization'];
     let decoded;
     try {
-      decoded = jwt.verify(token, config.jwtSecret);
+      decoded = jwt.verify(token, jwtEagle.secret);
     } catch (e) {
       return false;
     }

@@ -1,8 +1,7 @@
-import { LoginRequestDto, LoginResponseDto } from '@dto';
+import { LoginRequestDto, LoginResponseDto, SignUpRequestDto } from '@dto';
+import { AuthService } from '@service';
 import { Authorized, Body, HttpCode, JsonController, Post } from 'routing-controllers';
 import { container } from 'tsyringe';
-import { AuthService } from '../services/auth-service';
-import { SignUpRequestDto } from '../models/dto/signup-dto';
 
 @JsonController('/auth')
 export class AuthController {

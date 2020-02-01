@@ -8,7 +8,6 @@ import {
   UpdateResult,
 } from 'typeorm';
 import { SaveOptions } from 'typeorm/repository/SaveOptions';
-import { deprecate } from 'util';
 
 export class GenericRepository<T> extends AbstractRepository<T> {
   public async find(options?: FindManyOptions<T> | FindConditions<T>): Promise<T[]> {

@@ -1,11 +1,10 @@
 import { LoginRequestDto, LoginResponseDto, SignUpRequestDto } from '@dto';
 import { User } from '@entity';
-import { checkIfUnencryptedPasswordIsValid, generateToken } from '@helper';
+import { checkIfUnencryptedPasswordIsValid, generateToken, getRepo } from '@helper';
+import { UserRepository } from '@repository';
 import { NotFoundError, UnauthorizedError } from 'routing-controllers';
 import { Error } from 'tslint/lib/error';
 import { injectable } from 'tsyringe';
-import { getRepo } from '../helpers/connection';
-import { UserRepository } from '../repositories/user-repository';
 
 @injectable()
 export class AuthService {

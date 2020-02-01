@@ -1,5 +1,5 @@
-import { EntityRepository } from 'typeorm';
 import { PasswordHistory } from '@entity';
+import { EntityRepository } from 'typeorm';
 import { GenericRepository } from './generic-repository';
 
 @EntityRepository(PasswordHistory)

@@ -18,7 +18,10 @@
       "paths": {
          "@helper": ["src/helpers/index.ts"],
          "@entity": ["src/models/index.ts"],
-         "@dto": ["src/models/dto/index.ts"]
+         "@dto": ["src/models/dto/index.ts"],
+         "@config": ["src/configs/index.ts"],
+         "@repository": ["src/repositories/index.ts"],
+         "@service": ["src/services/index.ts"]
       }
    }
 }

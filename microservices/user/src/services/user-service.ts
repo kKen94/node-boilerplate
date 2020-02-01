@@ -1,12 +1,10 @@
 import { UserAddDto, UserUpdateDto } from '@dto';
 import { User } from '@entity';
-import { hashPassword } from '@helper';
+import { getRepo, hashPassword } from '@helper';
+import { PermissionRepository, UserRepository } from '@repository';
 import { validate } from 'class-validator';
 import { injectable } from 'tsyringe';
 import { DeleteResult, In } from 'typeorm';
-import { getRepo } from '../helpers/connection';
-import { PermissionRepository } from '../repositories/permission-repository';
-import { UserRepository } from '../repositories/user-repository';
 
 @injectable()
 export class UserService {

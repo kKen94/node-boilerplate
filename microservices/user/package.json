@@ -49,7 +49,8 @@
       "typeorm": "^0.2.20"
    },
    "scripts": {
-      "start": "set debug=* && cross-env NODE_ENV=dev ts-node-dev --respawn --transpileOnly -r tsconfig-paths/register ./src/index.ts",
+      "start": "yarn run update:database && yarn run run",
+      "run": "set debug=* && cross-env NODE_ENV=dev ts-node-dev --respawn --transpileOnly -r tsconfig-paths/register ./src/index.ts",
       "start:docker": "docker-compose up",
       "add:migration": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:generate -n",
       "update:database": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run",

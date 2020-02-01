@@ -1,8 +1,7 @@
-import { Permission, User } from '@entity';
+import { superUser } from '@config';
 import { hashPassword } from '@helper';
+import { UserRepository } from '@repository';
 import { Connection } from 'typeorm';
-import { PermissionRepository } from '../repositories/permission-repository';
-import { UserRepository } from '../repositories/user-repository';
 
 export const seedUser = async (connection: Connection): Promise<void> => {
   console.log('Seeding User....');
@@ -17,9 +16,9 @@ export const seedUser = async (connection: Connection): Promise<void> => {
 };
 
 const user = {
-  passwordHash: hashPassword('Cola_123'), // TODO: questa cosa qui non ci deve stare
-  email: 'nicola.taddei.94@gmail.com',
+  passwordHash: hashPassword(superUser.password),
+  email: superUser.email,
   emailConfirmed: true,
   permissions: [{ name: 'SUPER.ADMIN', description: 'Root admin over app admin' }],
-  passwordHistories: [{ passwordHash: hashPassword('Cola_123') }],
+  passwordHistories: [{ passwordHash: hashPassword(superUser.password) }],
 };
