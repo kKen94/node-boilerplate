@@ -87,12 +87,14 @@ export class User {
   @OneToMany(
     () => PasswordHistory,
     passwordHistory => passwordHistory.user,
+    { cascade: true },
   )
   public passwordHistories: PasswordHistory[];
 
   @ManyToMany(
     () => Permission,
     permission => permission.users,
+    { cascade: true },
   )
   @JoinTable()
   public permissions: Permission[];

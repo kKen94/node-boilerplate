@@ -20,6 +20,6 @@ const user = {
   passwordHash: hashPassword('Cola_123'), // TODO: questa cosa qui non ci deve stare
   email: 'nicola.taddei.94@gmail.com',
   emailConfirmed: true,
-  // permissions: { name: 'SUPER.ADMIN', description: 'Root admin over app admin' },
-  // passwordHistories: { passwordHash: hashPassword('Cola_123') },
+  permissions: [{ name: 'SUPER.ADMIN', description: 'Root admin over app admin' }],
+  passwordHistories: [{ passwordHash: hashPassword('Cola_123') }],
 };
