@@ -1,4 +1,4 @@
-name: user.api
+name: user.api-staging
 
 on:
   push:
@@ -49,8 +49,11 @@ jobs:
       - name: Create aws repo if not exist
         run: aws ecr describe-repositories --repository-names user.api-staging || aws ecr create-repository --repository-name user.api-staging --region eu-central-1
       - name: Build and push image
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           cd microservices/user
           yarn run docker:build:staging
-          docker push user_api
+          docker push docker push $ECR_REGISTRY/user.api-staging:user_api
       
