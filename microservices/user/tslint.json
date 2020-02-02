@@ -5,6 +5,11 @@
     "tslint-config-prettier",
     "tslint-config-airbnb"
   ],
+  "linterOptions": {
+    "exclude": [
+      "src/migrations/*.ts"
+    ]
+  },
   "jsRules": {},
   "rules": {
     "max-line-length": {
