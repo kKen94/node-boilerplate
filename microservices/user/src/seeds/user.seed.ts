@@ -19,6 +19,7 @@ const user = {
   passwordHash: hashPassword(superUser.password),
   email: superUser.email,
   emailConfirmed: true,
+  phoneNumber: '3425999882',
   permissions: [{ name: 'SUPER.ADMIN', description: 'Root admin over app admin' }],
   passwordHistories: [{ passwordHash: hashPassword(superUser.password) }],
 };

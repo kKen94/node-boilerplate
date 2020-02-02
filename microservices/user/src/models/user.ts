@@ -3,15 +3,20 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
+import { Company } from './company';
 import { PasswordHistory } from './password-history';
 import { Permission } from './permission';
+import { Person } from './person';
 
 @Entity()
 @Unique(['email'])
@@ -45,8 +50,8 @@ export class User {
   @IsBoolean()
   public emailConfirmed: boolean;
 
-  @Column({ nullable: true })
-  public phoneNumber?: string;
+  @Column()
+  public phoneNumber: string;
 
   @Column({ default: false })
   @IsBoolean()
@@ -98,4 +103,18 @@ export class User {
   )
   @JoinTable()
   public permissions: Permission[];
+
+  @OneToOne(
+    () => Person,
+    person => person.user,
+    { cascade: true },
+  )
+  @JoinColumn()
+  public person: Person;
+
+  @ManyToOne(
+    () => Company,
+    company => company.users,
+  )
+  public company: Company;
 }

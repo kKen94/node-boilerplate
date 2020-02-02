@@ -6,4 +6,5 @@ export const jwtEagle = {
 export const superUser = {
   password: 'Cola_123',
   email: 'nicola.taddei.94@gmail.com',
+  phoneNumber: '3425999882',
 };
