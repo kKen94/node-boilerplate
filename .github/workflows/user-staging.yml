@@ -5,7 +5,7 @@ on:
     branches:
       - develop
     paths:
-      - 'microservices/user/*'
+      - 'microservices/user/**'
 
 jobs:
   checkError:
