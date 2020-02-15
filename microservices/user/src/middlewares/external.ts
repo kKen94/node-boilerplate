@@ -1,15 +1,16 @@
-import * as bodyParser from 'body-parser';
-import * as cors from 'cors';
-import * as helmet from 'helmet';
-import * as morgan from 'morgan';
+import * as cors from '@koa/cors';
+import * as bodyParser from 'koa-bodyparser';
+import * as helmet from 'koa-helmet';
+import * as logger from 'koa-logger';
+import * as morgan from 'koa-morgan';
 import * as path from 'path';
 import { createStream } from 'rotating-file-stream';
-import { ExpressMiddlewareInterface, Middleware } from 'routing-controllers';
+import { KoaMiddlewareInterface, Middleware } from 'routing-controllers';
 
 @Middleware({ type: 'before' })
-export class HelmetMiddleware implements ExpressMiddlewareInterface {
-  public use(request: any, response: any, next?: (err?: any) => any): any {
-    return helmet()(request, response, next);
+export class HelmetMiddleware implements KoaMiddlewareInterface {
+  public use(context: any, next: (err?: any) => Promise<any>): Promise<any> {
+    return helmet()(context, next);
   }
 }
 
@@ -19,34 +20,37 @@ export class HelmetMiddleware implements ExpressMiddlewareInterface {
 // };
 // tslint:disable-next-line:max-classes-per-file
 @Middleware({ type: 'before' })
-export class CorsMiddleware implements ExpressMiddlewareInterface {
-  public use(request: any, response: any, next?: (err?: any) => any): any {
-    return cors()(request, response, next);
-    // return cors(corsOptions)(request, response, next);
+export class CorsMiddleware implements KoaMiddlewareInterface {
+  public use(context: any, next: (err?: any) => Promise<any>): Promise<any> {
+    return cors()(context, next);
   }
 }
 
 // tslint:disable-next-line:max-classes-per-file
 @Middleware({ type: 'before' })
-export class BodyParserMiddleware implements ExpressMiddlewareInterface {
-  public use(request: any, response: any, next?: (err?: any) => any): any {
-    return bodyParser.json()(request, response, next);
+export class LogMiddleware implements KoaMiddlewareInterface {
+  public use(context: any, next: (err?: any) => Promise<any>): Promise<any> {
+    return logger()(context, next);
+  }
+}
+
+// tslint:disable-next-line:max-classes-per-file
+@Middleware({ type: 'before' })
+export class BodyParserMiddleware implements KoaMiddlewareInterface {
+  public use(context: any, next: (err?: any) => Promise<any>): Promise<any> {
+    return bodyParser()(context, next);
   }
 }
 
 // tslint:disable-next-line:max-classes-per-file
 @Middleware({ type: 'after' })
-export class MorganMiddleware implements ExpressMiddlewareInterface {
-  public use(request: any, response: any, next?: (err?: any) => any): any {
+export class MorganMiddleware implements KoaMiddlewareInterface {
+  public use(context: any, next: (err?: any) => Promise<any>): Promise<any> {
     const srcDir = __dirname.replace('\\middlewares', '');
     const accessLogStream = createStream('access.log', {
       interval: '1d', // rotate daily
       path: path.join(srcDir, 'log'),
     });
-    return morgan('combined', { stream: accessLogStream })(
-      request,
-      response,
-      next,
-    );
+    return morgan('combined', { stream: accessLogStream })(context, next);
   }
 }
