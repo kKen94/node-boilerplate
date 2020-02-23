@@ -15,6 +15,8 @@ export const seedUser = async (connection: Connection): Promise<void> => {
   }
 };
 
+// TODO: spostare i permessi in un permission seed
+
 const user = {
   passwordHash: hashPassword(superUser.password),
   email: superUser.email,

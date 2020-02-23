@@ -77,6 +77,7 @@ createConnection(process.env.NODE_ENV)
         version: '1.0.0',
       },
     });
+    // @ts-ignore
     app.use(koaSwagger({ routePrefix: '/swagger', swaggerOptions: { spec } }));
     app.use(e2k(swStats.getMiddleware({ swaggerSpec: spec })));
 

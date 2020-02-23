@@ -3,7 +3,7 @@ name: user.api-staging
 on:
   push:
     branches:
-      - develop
+      - staging
     paths:
       - 'microservices/user/**'
 
@@ -15,7 +15,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          ref: 'develop'
+          ref: 'staging'
       - name: Install dependencies
         run: |
           cd microservices/user
@@ -36,7 +36,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          ref: 'develop'
+          ref: 'staging'
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:

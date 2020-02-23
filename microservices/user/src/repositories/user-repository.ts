@@ -17,4 +17,8 @@ export class UserRepository extends GenericRepository<User> {
       relations: ['permissions'],
     });
   }
+
+  public async emailExists(email: string): Promise<boolean> {
+    return await this.any({ where: { email } });
+  }
 }
