@@ -25,7 +25,7 @@ const user = {
   passwordHash,
   email: superUser.email,
   emailConfirmed: true,
-  phoneNumber: '3425999882',
+  phoneNumber: superUser.phoneNumber,
   permissions: [],
   passwordHistories: [{ passwordHash }],
 };

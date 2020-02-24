@@ -89,6 +89,8 @@ export class User {
   @IsBoolean()
   public active: boolean;
 
+  // TODO: qualcosa non va con il cascade
+
   @OneToMany(
     () => PasswordHistory,
     passwordHistory => passwordHistory.user,

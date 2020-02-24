@@ -8,3 +8,10 @@ export const superUser = {
   email: 'nicola.taddei.94@gmail.com',
   phoneNumber: '3425999882',
 };
+
+export const smtp = {
+  host: 'smtp.gmail.com',
+  port: 465,
+  user: 'developer@t2c.dev',
+  password: 'Eagle_developer_2020',
+};

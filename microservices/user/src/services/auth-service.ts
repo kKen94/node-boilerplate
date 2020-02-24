@@ -1,6 +1,13 @@
 import { LoginRequestDto, LoginResponseDto, SignUpRequestDto } from '@dto';
 import { Company, User } from '@entity';
-import { checkIfUnencryptedPasswordIsValid, checkRules, generateToken, getRepo, hashPassword } from '@helper';
+import {
+  checkIfUnencryptedPasswordIsValid,
+  checkRules,
+  generateToken,
+  getRepo,
+  hashPassword,
+  sendEmail,
+} from '@helper';
 import { CompanyRepository, PermissionRepository, UserRepository } from '@repository';
 import { InternalServerError, NotFoundError, UnauthorizedError } from 'routing-controllers';
 import { Error } from 'tslint/lib/error';
@@ -91,11 +98,11 @@ export class AuthService {
       throw new InternalServerError(e);
     }
 
-    /* TODO: inviare la mail per la verifica,
-       https://developers.google.com/gmail/api/guides/,
-       https://stackoverflow.com/questions/46566748/send-email-from-server-via-a-g-suite-email-address
-       https://medium.com/the-andela-way/how-to-implement-email-verification-feature-in-your-nodejs-app-using-express-sendgrid-sequelize-e5b255bf92a2
-    */
+    const emailText = `
+        div>Dear ${signUpDto.firstName} ${signUpDto.lastName} from ${signUpDto.companyName} company</div>
+        </br>
+        <div>Please confirm your email at https://</div>`;
+    await sendEmail([signUpDto.email], 'Confirm email 📧', emailText);
   }
 
   private async updateLastLogin(user: User): Promise<void> {
