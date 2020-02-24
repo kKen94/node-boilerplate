@@ -58,7 +58,6 @@
       "build": "cross-env NODE_ENV=dev tsc",
       "lint": "tslint --project tsconfig.json",
       "run": "set debug=* && cross-env NODE_ENV=dev ts-node-dev --respawn --transpileOnly -r tsconfig-paths/register ./src/index.ts",
-      "start:docker": "docker-compose up --abort-on-container-exit --force-recreate",
       "add:migration": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:generate -n",
       "update:database": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run",
       "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm",
@@ -68,8 +67,8 @@
       "format:check": "prettier --list-different \"src/**/*.{ts,tsx}\"",
       "format:write": "prettier --write \"src/**/*.{ts,tsx}\"",
       "dockerfile:cmd": "cross-env NODE_ENV=$APP_ENV ts-node -r tsconfig-paths/register ./src/index.ts",
-      "docker:build:staging": "docker-compose -f docker-compose.staging.yml build --no-cache",
-      "docker:build:prod": "docker-compose -f docker-compose.prod.yml build --no-cache"
+      "docker:build:staging": "docker build --no-cache -t user_api --build-arg APP_ENV=staging --build-arg DB_SYNC=true --build-arg DB_URL=postgres://kleqlggk:XMMZZWS_9Ec4E1_3n9hNAxAn76MOJqxS@rogue.db.elephantsql.com:5432/kleqlggk .",
+      "docker:build:prod": "docker build --no-cache -t user_api --build-arg APP_ENV=prod --build-arg DB_SYNC=false --build-arg DB_URL=dadefinire ."
    },
    "husky": {
       "hooks": {
