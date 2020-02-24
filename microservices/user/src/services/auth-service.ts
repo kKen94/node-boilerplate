@@ -1,7 +1,7 @@
 import { LoginRequestDto, LoginResponseDto, SignUpRequestDto } from '@dto';
 import { Company, User } from '@entity';
 import { checkIfUnencryptedPasswordIsValid, generateToken, getRepo, hashPassword } from '@helper';
-import { CompanyRepository, UserRepository } from '@repository';
+import { CompanyRepository, PermissionRepository, UserRepository } from '@repository';
 import { InternalServerError, NotFoundError, UnauthorizedError } from 'routing-controllers';
 import { Error } from 'tslint/lib/error';
 import { injectable } from 'tsyringe';
@@ -9,6 +9,7 @@ import { injectable } from 'tsyringe';
 @injectable()
 export class AuthService {
   private readonly userRepository = getRepo(UserRepository);
+  private readonly permissionRepository = getRepo(PermissionRepository);
   private readonly companyRepository = getRepo(CompanyRepository);
 
   public async login(loginDto: LoginRequestDto): Promise<LoginResponseDto> {
@@ -56,12 +57,13 @@ export class AuthService {
     }
 
     // TODO: controllo paramenti password
-    // TODO: spostare i permessi in un permission seed
+
+    const adminPermission = await this.permissionRepository.findOne({ where: { name: 'ADMIN' } });
     const user = {
       email: signUpDto.email,
       phoneNumber: signUpDto.phoneNumber,
       passwordHash: hashPassword(signUpDto.password),
-      permissions: [{ name: 'ADMIN', description: 'Admin company permission' }],
+      permissions: [adminPermission],
       passwordHistories: [{ passwordHash: hashPassword(signUpDto.password) }],
       person: { firstName: signUpDto.firstName, lastName: signUpDto.lastName },
     };

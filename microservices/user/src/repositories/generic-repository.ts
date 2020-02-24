@@ -66,7 +66,7 @@ export class GenericRepository<T> extends AbstractRepository<T> {
     return await this.repository.delete(entitiesId);
   }
 
-  public async any(options: FindOneOptions<T>): Promise<boolean> {
-    return !!(await this.repository.findOne(options));
+  public async any(options?: FindOneOptions<T>): Promise<boolean> {
+    return options ? !!(await this.repository.findOne(options)) : !!(await this.repository.findOne());
   }
 }
