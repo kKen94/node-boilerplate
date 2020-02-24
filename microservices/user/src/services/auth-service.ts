@@ -1,6 +1,6 @@
 import { LoginRequestDto, LoginResponseDto, SignUpRequestDto } from '@dto';
 import { Company, User } from '@entity';
-import { checkIfUnencryptedPasswordIsValid, generateToken, getRepo, hashPassword } from '@helper';
+import { checkIfUnencryptedPasswordIsValid, checkRules, generateToken, getRepo, hashPassword } from '@helper';
 import { CompanyRepository, PermissionRepository, UserRepository } from '@repository';
 import { InternalServerError, NotFoundError, UnauthorizedError } from 'routing-controllers';
 import { Error } from 'tslint/lib/error';
@@ -51,6 +51,10 @@ export class AuthService {
   }
 
   public async signUp(signUpDto: SignUpRequestDto): Promise<any> {
+    if (!checkRules(signUpDto.password)) {
+      throw new Error('The password does not reflect the security parameters');
+    }
+
     const emailExists = await this.userRepository.emailExists(signUpDto.email);
     if (emailExists) {
       throw new Error('Email already present on DB');

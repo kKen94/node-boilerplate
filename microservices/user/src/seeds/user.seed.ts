@@ -1,8 +1,8 @@
 import { superUser } from '@config';
+import { User } from '@entity';
 import { hashPassword } from '@helper';
 import { PermissionRepository, UserRepository } from '@repository';
 import { Connection } from 'typeorm';
-import { User } from '@entity';
 
 export const seedUser = async (connection: Connection): Promise<void> => {
   console.log('Seeding User....');
