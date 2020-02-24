@@ -1,4 +1,4 @@
-FROM node:12
+FROM node:12-alpine
 
 ARG APP_ENV
 ENV APP_ENV=${APP_ENV}
@@ -14,7 +14,7 @@ WORKDIR /usr/src/app
 COPY package.json ./
 COPY yarn.lock ./
 
-RUN yarn
+RUN yarn install --prod
 
 COPY . .
 

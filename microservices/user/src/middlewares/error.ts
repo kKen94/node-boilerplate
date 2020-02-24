@@ -1,17 +1,11 @@
-import { Response } from 'express';
-import {
-  ExpressErrorMiddlewareInterface,
-  Middleware,
-} from 'routing-controllers';
+import { KoaMiddlewareInterface, Middleware } from 'routing-controllers';
 
-@Middleware({ type: 'after' })
-export class CustomErrorHandler implements ExpressErrorMiddlewareInterface {
-  public error(
-    error: any,
-    request: any,
-    response: Response,
-    next: (err: any) => any,
-  ) {
-    // console.log(response.finished);
+@Middleware({ type: 'before' })
+export class CustomErrorHandler implements KoaMiddlewareInterface {
+  // interface implementation is optional
+  public use(context: any, next: (err?: any) => Promise<any>): Promise<any> {
+    return next().catch(error => {
+      console.log(error);
+    });
   }
 }

@@ -3,12 +3,13 @@ import { getRepo } from '@helper';
 import { UserRepository } from '@repository';
 import { getFromContainer, MetadataStorage } from 'class-validator';
 import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
+import * as e2k from 'express-to-koa';
 import * as jwt from 'jsonwebtoken';
+import * as koaSwagger from 'koa2-swagger-ui';
 import 'reflect-metadata';
-import { Action, createExpressServer, getMetadataArgsStorage } from 'routing-controllers';
+import { Action, createKoaServer, getMetadataArgsStorage } from 'routing-controllers';
 import { routingControllersToSpec } from 'routing-controllers-openapi';
 import * as swStats from 'swagger-stats';
-import * as swaggerUI from 'swagger-ui-express';
 import { createConnection } from 'typeorm';
 import { seed } from './seeds/seed';
 
@@ -50,7 +51,7 @@ const routingControllersOptions = {
 
 createConnection(process.env.NODE_ENV)
   .then(async connection => {
-    const app = createExpressServer(routingControllersOptions);
+    const app = createKoaServer(routingControllersOptions);
 
     // Parse class-validator classes into JSON Schema:
     const metadatas = (getFromContainer(MetadataStorage) as any).validationMetadatas;
@@ -76,9 +77,9 @@ createConnection(process.env.NODE_ENV)
         version: '1.0.0',
       },
     });
-
-    app.use('/swagger', swaggerUI.serve, swaggerUI.setup(spec));
-    app.use(swStats.getMiddleware({ swaggerSpec: spec, name: 'swagger-stats-test' }));
+    // @ts-ignore
+    app.use(koaSwagger({ routePrefix: '/swagger', swaggerOptions: { spec } }));
+    app.use(e2k(swStats.getMiddleware({ swaggerSpec: spec })));
 
     app.listen(3001, async () => {
       await seed(connection);

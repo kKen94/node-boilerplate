@@ -65,4 +65,8 @@ export class GenericRepository<T> extends AbstractRepository<T> {
   public async deleteRange(entitiesId: string[] | number[]): Promise<DeleteResult> {
     return await this.repository.delete(entitiesId);
   }
+
+  public async any(options: FindOneOptions<T>): Promise<boolean> {
+    return !!(await this.repository.findOne(options));
+  }
 }

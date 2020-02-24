@@ -1,11 +1,11 @@
-name: user.api
+name: user.api-staging
 
 on:
   push:
     branches:
-      - develop
+      - staging
     paths:
-      - 'microservices/user/*'
+      - 'microservices/user/**'
 
 jobs:
   checkError:
@@ -15,19 +15,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          ref: 'develop'
-      #- name: Install yarn
-      #  run: npm install -g yarn
-      - name: Navigate to folder
-        run: cd microservices/user
+          ref: 'staging'
       - name: Install dependencies
-        run: yarn
-      - name: Lint
-        run: yarn run lint
+        run: |
+          cd microservices/user
+          yarn
       #- name: Test
-      #  run: yarn run test
+      #  run: |
+      #    cd microservices/user
+      #    yarn run test
       - name: Build local
-        run: yarn run build
+        run: |
+          cd microservices/user
+          yarn run build
   pushImage:
     name: Build and publish docker image
     needs: checkError
@@ -36,10 +36,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          ref: 'develop'
-      - name: Navigate to folder
-        run: cd microservices/user
-      - name: Install dependencies
-        run: yarn
-      - name: Build docker
-        run: yarn run docker:build:staging
+          ref: 'staging'
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-central-1
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Create aws repo if not exist
+        run: aws ecr describe-repositories --repository-names user.api-staging || aws ecr create-repository --repository-name user.api-staging --region eu-central-1
+      - name: Build and push image
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          cd microservices/user
+          yarn run docker:build:staging
+          docker push docker push $ECR_REGISTRY/user.api-staging:user_api
+      
