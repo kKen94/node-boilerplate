@@ -5,8 +5,8 @@ import { Connection } from 'typeorm';
 export const seedPermission = async (connection: Connection): Promise<void> => {
   console.log('Seeding Permission....');
   const permissionRepo = connection.getCustomRepository(PermissionRepository);
-  const emptyTable = await permissionRepo.any();
-  if (emptyTable) {
+  const fullTable = await permissionRepo.any();
+  if (!fullTable) {
     await permissionRepo.addOrUpdateRange(permission as Permission[]);
     console.log('...Permission seeded!');
   } else {
