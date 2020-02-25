@@ -1,17 +1,30 @@
 import { smtp } from '@config';
 import * as nodemailer from 'nodemailer';
 
-export const sendEmail = async (to: string[], subject: string, text: string) => {
-  const transporter = nodemailer.createTransport({
-    host: smtp.host,
-    port: smtp.port,
-    secure: true,
-    auth: {
-      user: smtp.user,
-      pass: smtp.password,
-    },
-  });
+const transporter = nodemailer.createTransport({
+  host: smtp.host,
+  port: smtp.port,
+  secure: smtp.password,
+  auth: {
+    user: smtp.user,
+    pass: smtp.password,
+  },
+});
 
+export const verifySmtpAsync = () => {
+  return new Promise((resolve, reject) => {
+    transporter.verify(error => {
+      if (error) {
+        throw new Error(error);
+      } else {
+        console.log('Server email is ready');
+        resolve();
+      }
+    });
+  });
+};
+
+export const sendEmail = async (to: string[], subject: string, text: string) => {
   const email: any = {
     subject,
     from: '"Doxy 📅" <noreply@t2c.dev>', // sender address
