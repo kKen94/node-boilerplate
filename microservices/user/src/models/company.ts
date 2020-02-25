@@ -14,8 +14,7 @@ export class Company {
   @Length(0, 30)
   public name: string;
 
-  @Column()
-  @IsNotEmpty()
+  @Column({ nullable: true })
   @Length(0, 30)
   public vatNumber: string;
 

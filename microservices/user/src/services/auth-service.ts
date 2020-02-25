@@ -72,7 +72,6 @@ export class AuthService {
     const adminPermission = await this.permissionRepository.findOne({ where: { name: 'ADMIN' } });
     const user = {
       email: signUpDto.email,
-      phoneNumber: signUpDto.phoneNumber,
       passwordHash: hashPassword(signUpDto.password),
       permissions: [adminPermission],
       passwordHistories: [{ passwordHash: hashPassword(signUpDto.password) }],
@@ -88,7 +87,6 @@ export class AuthService {
 
     const company = {
       name: signUpDto.companyName,
-      vatNumber: signUpDto.vatNumber,
       users: [insertUser],
     };
 

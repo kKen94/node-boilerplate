@@ -4,6 +4,4 @@ export interface SignUpRequestDto {
   firstName: string;
   lastName: string;
   companyName: string;
-  phoneNumber: string;
-  vatNumber: string;
 }

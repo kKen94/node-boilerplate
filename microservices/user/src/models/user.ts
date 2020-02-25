@@ -50,8 +50,8 @@ export class User {
   @IsBoolean()
   public emailConfirmed: boolean;
 
-  @Column()
-  public phoneNumber: string;
+  @Column({ nullable: true })
+  public phoneNumber?: string;
 
   @Column({ default: false })
   @IsBoolean()
