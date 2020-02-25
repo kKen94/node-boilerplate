@@ -11,6 +11,7 @@ services:
         - DB_URL=postgresql://postgres:postgres@postgres_dev:5432/user
     depends_on:
       - postgres_user
+      - rabbit_dev
     ports:
       - "3001:3001"
     container_name: user_api_dev
@@ -18,16 +19,12 @@ services:
   postgres_user:
     image: postgres:11.5
     container_name: postgres_user
-    depends_on:
-      - rabbit_dev
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=user
 
   rabbit_dev:
     image: rabbitmq:3
-    ports:
-      - "5672:5672"
     container_name: rabbit_dev
     restart: always
     environment:
