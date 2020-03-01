@@ -27,7 +27,7 @@ export const verifySmtpAsync = () => {
 export const sendEmail = async (to: string[], subject: string, text: string) => {
   const email: any = {
     subject,
-    from: '"Doxy 📅" <noreply@t2c.dev>', // sender address
+    from: '"Restify  📅" <noreply@t2c.dev>', // sender address
     to: to.join(', '),
   };
   if (text.includes('</') && text.includes('>')) {

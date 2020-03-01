@@ -97,7 +97,7 @@ export class AuthService {
     }
 
     const emailText = `
-        div>Dear ${signUpDto.firstName} ${signUpDto.lastName} from ${signUpDto.companyName} company</div>
+        <div>Dear ${signUpDto.firstName} ${signUpDto.lastName} from ${signUpDto.companyName} company</div>
         </br>
         <div>Please confirm your email at https://</div>`;
     await sendEmail([signUpDto.email], 'Confirm email 📧', emailText);
