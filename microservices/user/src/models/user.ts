@@ -17,6 +17,7 @@ import { Company } from './company';
 import { PasswordHistory } from './password-history';
 import { Permission } from './permission';
 import { Person } from './person';
+import { TokenVerification } from './token-verification';
 
 @Entity()
 @Unique(['email'])
@@ -90,6 +91,13 @@ export class User {
   public active: boolean;
 
   // TODO: qualcosa non va con il cascade
+
+  @OneToMany(
+    () => TokenVerification,
+    tokenVerification => tokenVerification.user,
+    { cascade: true },
+  )
+  public tokenVerifications: TokenVerification[];
 
   @OneToMany(
     () => PasswordHistory,
