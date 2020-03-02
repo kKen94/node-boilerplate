@@ -3,3 +3,4 @@ export * from './password-history-repository';
 export * from './permission-repository';
 export * from './user-repository';
 export * from './company-repository';
+export * from './token-verification-repository';

@@ -1,14 +1,16 @@
 import { LoginRequestDto, LoginResponseDto, SignUpRequestDto } from '@dto';
-import { Company, User } from '@entity';
+import { Company, TokenVerification, User } from '@entity';
 import {
   checkIfUnencryptedPasswordIsValid,
   checkRules,
   generateToken,
+  getRandomAlphaNumeric,
+  getRandomInt,
   getRepo,
   hashPassword,
   sendEmail,
 } from '@helper';
-import { CompanyRepository, PermissionRepository, UserRepository } from '@repository';
+import { CompanyRepository, PermissionRepository, TokenVerificationRepository, UserRepository } from '@repository';
 import { InternalServerError, NotFoundError, UnauthorizedError } from 'routing-controllers';
 import { Error } from 'tslint/lib/error';
 import { injectable } from 'tsyringe';
@@ -18,6 +20,7 @@ export class AuthService {
   private readonly userRepository = getRepo(UserRepository);
   private readonly permissionRepository = getRepo(PermissionRepository);
   private readonly companyRepository = getRepo(CompanyRepository);
+  private readonly tokenVerificationRepository = getRepo(TokenVerificationRepository);
 
   public async login(loginDto: LoginRequestDto): Promise<LoginResponseDto> {
     let user: User;
@@ -96,10 +99,21 @@ export class AuthService {
       throw new InternalServerError(e);
     }
 
+    let token = '';
+    for (let i = 0; i < 6; i += 1) {
+      token += getRandomAlphaNumeric();
+    }
+
+    try {
+      await this.tokenVerificationRepository.addOrUpdate({ token, user: insertUser } as TokenVerification);
+    } catch (e) {
+      throw new InternalServerError(e);
+    }
+
     const emailText = `
         <div>Dear ${signUpDto.firstName} ${signUpDto.lastName} from ${signUpDto.companyName} company</div>
         </br>
-        <div>Please confirm your email at https://</div>`;
+        <div>The verification code is ${token}</div>`;
     await sendEmail([signUpDto.email], 'Confirm email 📧', emailText);
   }
 
