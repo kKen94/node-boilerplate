@@ -3,7 +3,7 @@ export =
     environment: process.env.NODE_ENV,
     name: process.env.NODE_ENV,
     type: 'postgres',
-    url: process.env.DB_URL || 'postgresql://postgres:postgres@localhost:5432/user',
+    url: process.env.DB_URL || 'postgresql://postgres:postgres@localhost:54321/user',
     synchronize: 'true' === process.env.DB_SYNC,
     logging: true,
     entities: ['src/models/**/*.ts'],

@@ -8,25 +8,33 @@ services:
       args:
         - APP_ENV=dev
         - DB_SYNC=true
-        - DB_URL=postgresql://postgres:postgres@postgres_dev:5432/user
+        - DB_URL=postgresql://postgres:postgres@postgres_user_dev:5432/user
     depends_on:
-      - postgres_user
+      - postgres_user_dev
       - rabbit_dev
     ports:
       - "3001:3001"
     container_name: user_api_dev
+    networks:
+      - t2c-api-dev
 
-  postgres_user:
+  postgres_user_dev:
     image: postgres:11.5
-    container_name: postgres_user
+    networks:
+      - t2c-api-dev
+    container_name: postgres_user_dev
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=user
 
   rabbit_dev:
     image: rabbitmq:3
+    networks:
+      - t2c-api-dev
     container_name: rabbit_dev
-    restart: always
     environment:
       - RABBITMQ_DEFAULT_USER=rabbit_user
       - RABBITMQ_DEFAULT_PASS=Rabbit_123
+
+networks:
+  t2c-api-dev:
