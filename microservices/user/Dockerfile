@@ -14,9 +14,23 @@ WORKDIR /usr/src/app
 COPY package.json ./
 COPY yarn.lock ./
 
-RUN yarn install --prod
+RUN yarn install
 
 COPY . .
 
 EXPOSE 3001
 CMD [ "yarn", "run", "dockerfile:cmd" ]
+
+#FROM node:12 AS builder
+#WORKDIR /app
+#COPY ./package.json ./
+#COPY yarn.lock ./
+#RUN yarn install
+#COPY . .
+#RUN yarn run build
+#
+#
+#FROM node:12-alpine
+#WORKDIR /app
+#COPY --from=builder /app ./
+#CMD ["yarn", "run", "start"]
