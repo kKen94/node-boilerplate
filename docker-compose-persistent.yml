@@ -3,9 +3,11 @@ services:
 
   postgres_user_persistent:
     image: postgres:11.5
+    networks:
+      - t2c-persistent
     container_name: postgres_user_persistent
     ports:
-      - "5431:5432"
+      - "54321:5432"
     restart: always
     environment:
       - POSTGRES_PASSWORD=postgres
