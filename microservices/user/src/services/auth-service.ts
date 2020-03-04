@@ -13,6 +13,7 @@ import { CompanyRepository, PermissionRepository, TokenVerificationRepository, U
 import { TokenExpiredError } from 'jsonwebtoken';
 import { BadRequestError, InternalServerError, NotFoundError, UnauthorizedError } from 'routing-controllers';
 import { injectable } from 'tsyringe';
+import { normalizeDbDate } from '../helpers/date';
 
 @injectable()
 export class AuthService {
@@ -42,13 +43,16 @@ export class AuthService {
     }
 
     const validateActiveDate =
-      (user.activeFrom <= new Date() || !user.activeFrom) && (user.activeTo > new Date() || !user.activeTo);
+      (normalizeDbDate(user.activeFrom) <= new Date() || !normalizeDbDate(user.activeFrom)) &&
+      (normalizeDbDate(user.activeTo) > new Date() || !normalizeDbDate(user.activeTo));
 
     if (!validateActiveDate || !user.active) {
       throw new Error('User not active');
     }
 
-    const resetPassword = (user.passwordExpiration && user.passwordExpiration <= new Date()) || user.forceResetPassword;
+    const resetPassword =
+      (normalizeDbDate(user.passwordExpiration) && normalizeDbDate(user.passwordExpiration) <= new Date()) ||
+      user.forceResetPassword;
 
     if (resetPassword) {
       return new LoginResponseDto(null, null, null, true);
@@ -106,20 +110,17 @@ export class AuthService {
   public async verifyEmail(token: string, userId: string): Promise<void> {
     const user = await this.userRepository.findById(userId);
     if (user.emailConfirmed) {
-      throw new Error('Mail already confirmed');
+      throw new Error('Email already confirmed');
     }
     const verificationToken = await this.tokenVerificationRepository.findOne({
       where: { userId },
       order: { createdAt: 'DESC' },
     });
     if (!verificationToken) {
-      throw new InternalServerError('Il token non esiste');
+      throw new InternalServerError('Il token non è stato creato');
     }
-    if (
-      new Date().getTime() >
-      verificationToken.expiredAt.getTime() - verificationToken.expiredAt.getTimezoneOffset() * 60000
-    ) {
-      throw new TokenExpiredError('Il token è scaduto', verificationToken.expiredAt);
+    if (new Date() > normalizeDbDate(verificationToken.expiredAt)) {
+      throw new TokenExpiredError('Il token è scaduto', normalizeDbDate(verificationToken.expiredAt));
     }
     if (verificationToken.token !== token) {
       throw new BadRequestError('Il token non corrisponde');

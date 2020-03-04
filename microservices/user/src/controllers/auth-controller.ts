@@ -29,7 +29,7 @@ export class AuthController {
   }
 
   @Post('/sign-up')
-  @HttpCode(201)
+  @HttpCode(201) // TODO: verificare che esca questo HttpCode
   public async signUp(@Body() signUpDto: SignUpRequestDto): Promise<void> {
     return await this.authService.signUp(signUpDto);
   }
