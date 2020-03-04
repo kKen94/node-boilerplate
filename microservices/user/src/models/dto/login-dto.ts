@@ -17,7 +17,7 @@ export class LoginResponseDto {
     email: string,
     token: string,
     // image:
-    forceResetPassword: boolean,
+    forceResetPassword = false,
   ) {
     this.id = id;
     this.email = email;

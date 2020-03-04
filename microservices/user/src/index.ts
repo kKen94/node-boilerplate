@@ -1,5 +1,5 @@
 import { jwtEagle } from '@config';
-import { getRepo, verifySmtpAsync } from '@helper';
+import { cleanToken, getRepo, verifySmtpAsync } from '@helper';
 import { UserRepository } from '@repository';
 import { getFromContainer, MetadataStorage } from 'class-validator';
 import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
@@ -25,17 +25,20 @@ const routingControllersOptions = {
     },
   },
   authorizationChecker: async (action: Action, requestPermissions: string[]) => {
-    const token = action.request.headers['authorization'];
+    const token: string = action.request.headers['authorization'];
     let decoded;
     try {
-      decoded = jwt.verify(token, jwtEagle.secret);
+      decoded = jwt.verify(cleanToken(token), jwtEagle.secret);
     } catch (e) {
       return false;
     }
 
     if (requestPermissions.length) {
       const userRepository = getRepo(UserRepository);
-      const user = await userRepository.userByIdWithPermissions(decoded['id']);
+      const user = await userRepository.userByIdWithPermissions(decoded['userId']);
+      if (user && requestPermissions.includes('EMAIL.VERIFICATION')) {
+        return true;
+      }
       return requestPermissions.every(requestPermission =>
         user.permissions.map(permission => permission.name).includes(requestPermission),
       );
@@ -43,9 +46,9 @@ const routingControllersOptions = {
   },
   currentUserChecker: async (action: Action) => {
     const token = action.request.headers['authorization'];
-    const decoded = jwt.decode(token);
+    const decoded = jwt.decode(cleanToken(token));
     const userRepository = getRepo(UserRepository);
-    return await userRepository.getById(decoded['id']);
+    return await userRepository.getById(decoded['userId']);
   },
 };
 
