@@ -35,7 +35,7 @@ const routingControllersOptions = {
 
     if (requestPermissions.length) {
       const userRepository = getRepo(UserRepository);
-      const user = await userRepository.userByIdWithPermissions(decoded['userId']);
+      const user = await userRepository.findByIdWithPermissions(decoded['userId']);
       if (user && requestPermissions.includes('EMAIL.VERIFICATION')) {
         return true;
       }
@@ -48,7 +48,7 @@ const routingControllersOptions = {
     const token = action.request.headers['authorization'];
     const decoded = jwt.decode(cleanToken(token));
     const userRepository = getRepo(UserRepository);
-    return await userRepository.getById(decoded['userId']);
+    return await userRepository.findById(decoded['userId']);
   },
 };
 

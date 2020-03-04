@@ -17,7 +17,7 @@ export class TokenVerification {
   @CreateDateColumn({ update: false })
   public createdAt: Date;
 
-  @Column({ default: () => `localtimestamp + interval '10 minute'` })
+  @Column({ default: () => `localtimestamp + interval '1 hour'` })
   @IsDate()
   public expiredAt: Date;
 

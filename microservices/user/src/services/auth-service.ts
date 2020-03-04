@@ -4,7 +4,6 @@ import {
   checkIfUnencryptedPasswordIsValid,
   checkRules,
   generateToken,
-  generateTokenWithCustomPermissions,
   getRandomAlphaNumeric,
   getRepo,
   hashPassword,
@@ -25,7 +24,7 @@ export class AuthService {
   public async login(loginDto: LoginRequestDto): Promise<LoginResponseDto> {
     let user: User;
     try {
-      user = await this.userRepository.userByEmailWithPermissions(loginDto.email);
+      user = await this.userRepository.findByEmailWithPermissions(loginDto.email);
     } catch (error) {
       throw new NotFoundError(`User not found`);
     }
@@ -60,7 +59,7 @@ export class AuthService {
     return new LoginResponseDto(user.id, user.email, token);
   }
 
-  public async signUp(signUpDto: SignUpRequestDto): Promise<LoginResponseDto> {
+  public async signUp(signUpDto: SignUpRequestDto): Promise<void> {
     if (!checkRules(signUpDto.password)) {
       throw new Error('The password does not reflect the security parameters');
     }
@@ -101,25 +100,25 @@ export class AuthService {
       }
     }
 
-    await this.sendEmailToken(insertUser, `${signUpDto.firstName} ${signUpDto.lastName}`);
-
-    const jwtToken = await generateTokenWithCustomPermissions(insertUser.id, 'EMAIL.VERIFICATION');
-    return new LoginResponseDto(insertUser.id, '', jwtToken);
+    await this.sendEmailToken(insertUser, signUpDto.callbackUrl, `${signUpDto.firstName} ${signUpDto.lastName}`);
   }
 
-  public async verifyEmail(token: string, user: User): Promise<void> {
+  public async verifyEmail(token: string, userId: string): Promise<void> {
+    const user = await this.userRepository.findById(userId);
+    if (user.emailConfirmed) {
+      throw new Error('Mail already confirmed');
+    }
     const verificationToken = await this.tokenVerificationRepository.findOne({
-      where: {
-        userId: user.id,
-      },
-      order: {
-        createdAt: 'DESC',
-      },
+      where: { userId },
+      order: { createdAt: 'DESC' },
     });
     if (!verificationToken) {
       throw new InternalServerError('Il token non esiste');
     }
-    if (new Date() > verificationToken.expiredAt) {
+    if (
+      new Date().getTime() >
+      verificationToken.expiredAt.getTime() - verificationToken.expiredAt.getTimezoneOffset() * 60000
+    ) {
       throw new TokenExpiredError('Il token è scaduto', verificationToken.expiredAt);
     }
     if (verificationToken.token !== token) {
@@ -129,16 +128,17 @@ export class AuthService {
     await this.userRepository.addOrUpdate(user);
   }
 
-  public async generateNewEmailToken(user: User): Promise<void> {
-    await this.sendEmailToken(user);
-  }
+  // public async generateNewEmailToken(userEmail: string): Promise<void> {
+  //   const user = await this.userRepository.findByEmail(userEmail);
+  //   await this.sendEmailToken(user, );
+  // }
 
   private async updateLastLogin(user: User): Promise<void> {
     user.lastLogin = new Date();
     await this.userRepository.addOrUpdate(user);
   }
 
-  private async sendEmailToken(user: User, fullName = ''): Promise<void> {
+  private async sendEmailToken(user: User, callbackUrl: string, fullName = ''): Promise<void> {
     let token = '';
     for (let i = 0; i < 6; i += 1) {
       token += getRandomAlphaNumeric();
@@ -153,7 +153,8 @@ export class AuthService {
     const emailText = `
         <div>Dear ${fullName || 'user'}</div>
         </br>
-        <div>The verification code is ${token}</div>`;
+        <div>The verification code is ${token}</div>
+        <div>Go to this link and insert token to activate your account: ${callbackUrl}/${user.id}</div>`;
     await sendEmail([user.email], 'Confirm email 📧', emailText);
   }
 }

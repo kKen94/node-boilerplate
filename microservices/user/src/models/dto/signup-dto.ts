@@ -3,5 +3,6 @@ export interface SignUpRequestDto {
   password: string;
   firstName: string;
   lastName: string;
+  callbackUrl: string;
   companyName?: string;
 }

@@ -1,6 +1,16 @@
 import { LoginRequestDto, LoginResponseDto, SignUpRequestDto } from '@dto';
 import { AuthService } from '@service';
-import { Authorized, Body, CurrentUser, Get, HttpCode, JsonController, Param, Post } from 'routing-controllers';
+import {
+  Authorized,
+  Body,
+  CurrentUser,
+  Get,
+  HttpCode,
+  JsonController,
+  Param,
+  Post,
+  QueryParam,
+} from 'routing-controllers';
 import { container } from 'tsyringe';
 import { User } from '@entity';
 
@@ -20,21 +30,19 @@ export class AuthController {
 
   @Post('/sign-up')
   @HttpCode(201)
-  public async signUp(@Body() signUpDto: SignUpRequestDto): Promise<LoginResponseDto> {
+  public async signUp(@Body() signUpDto: SignUpRequestDto): Promise<void> {
     return await this.authService.signUp(signUpDto);
   }
 
-  @Authorized('EMAIL.VERIFICATION')
-  @Get('/verify-email/:token')
+  @Get('/verify-email/:userId')
   @HttpCode(200)
-  public async verifyEmail(@Param('token') token: string, @CurrentUser({ required: true }) user: User): Promise<void> {
-    return await this.authService.verifyEmail(token, user);
+  public async verifyEmail(@Param('userId') userId: string, @QueryParam('token') token: string): Promise<void> {
+    return await this.authService.verifyEmail(token, userId);
   }
 
-  @Authorized('EMAIL.VERIFICATION')
-  @Get('/generate-email-token')
-  @HttpCode(200)
-  public async generateEmailToken(@CurrentUser({ required: true }) user: User): Promise<void> {
-    return await this.authService.generateNewEmailToken(user);
-  }
+  // @Get('/generate-email-token/:userEmail')
+  // @HttpCode(200)
+  // public async generateEmailToken(@Param('userEmail') userEmail: string): Promise<void> {
+  //   return await this.authService.generateNewEmailToken(userEmail);
+  // }
 }
