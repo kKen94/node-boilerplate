@@ -24,7 +24,7 @@ export class GenericRepository<T> extends AbstractRepository<T> {
       : await this.repository.findOneOrFail(options);
   }
 
-  public async getById<TKey>(id: TKey, options?: FindOneOptions<T>): Promise<T> {
+  public async findById<TKey>(id: TKey, options?: FindOneOptions<T>): Promise<T> {
     return await this.repository.findOneOrFail(id, options);
   }
 

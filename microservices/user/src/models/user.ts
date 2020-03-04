@@ -10,6 +10,7 @@ import {
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
+  RelationId,
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
@@ -17,6 +18,7 @@ import { Company } from './company';
 import { PasswordHistory } from './password-history';
 import { Permission } from './permission';
 import { Person } from './person';
+import { TokenVerification } from './token-verification';
 
 @Entity()
 @Unique(['email'])
@@ -92,6 +94,13 @@ export class User {
   // TODO: qualcosa non va con il cascade
 
   @OneToMany(
+    () => TokenVerification,
+    tokenVerification => tokenVerification.user,
+    { cascade: true },
+  )
+  public tokenVerifications: TokenVerification[];
+
+  @OneToMany(
     () => PasswordHistory,
     passwordHistory => passwordHistory.user,
     { cascade: true },
@@ -114,9 +123,15 @@ export class User {
   @JoinColumn()
   public person: Person;
 
+  @RelationId((user: User) => user.person)
+  public personId: string;
+
   @ManyToOne(
     () => Company,
     company => company.users,
   )
   public company: Company;
+
+  @RelationId((user: User) => user.company)
+  public companyId: string;
 }

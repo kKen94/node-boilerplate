@@ -16,7 +16,7 @@ export class UserService {
   }
 
   public async getOne(id: string): Promise<User> {
-    return await this.userRepository.getById(id);
+    return await this.userRepository.findById(id);
   }
 
   public async save(userDto: UserAddDto): Promise<User> {
@@ -36,7 +36,7 @@ export class UserService {
   }
 
   public async update(id: string, userDto: UserUpdateDto): Promise<void> {
-    const user = await this.userRepository.getById(id);
+    const user = await this.userRepository.findById(id);
     user.phoneNumber = userDto.phoneNumber;
     user.permissions = await this.permissionRepository.find({
       id: In(userDto.permissionsId),

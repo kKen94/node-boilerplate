@@ -1,16 +1,17 @@
 import { LoginRequestDto, LoginResponseDto, SignUpRequestDto } from '@dto';
-import { Company, User } from '@entity';
+import { Company, TokenVerification, User } from '@entity';
 import {
   checkIfUnencryptedPasswordIsValid,
   checkRules,
   generateToken,
+  getRandomAlphaNumeric,
   getRepo,
   hashPassword,
   sendEmail,
 } from '@helper';
-import { CompanyRepository, PermissionRepository, UserRepository } from '@repository';
-import { InternalServerError, NotFoundError, UnauthorizedError } from 'routing-controllers';
-import { Error } from 'tslint/lib/error';
+import { CompanyRepository, PermissionRepository, TokenVerificationRepository, UserRepository } from '@repository';
+import { TokenExpiredError } from 'jsonwebtoken';
+import { BadRequestError, InternalServerError, NotFoundError, UnauthorizedError } from 'routing-controllers';
 import { injectable } from 'tsyringe';
 
 @injectable()
@@ -18,11 +19,12 @@ export class AuthService {
   private readonly userRepository = getRepo(UserRepository);
   private readonly permissionRepository = getRepo(PermissionRepository);
   private readonly companyRepository = getRepo(CompanyRepository);
+  private readonly tokenVerificationRepository = getRepo(TokenVerificationRepository);
 
   public async login(loginDto: LoginRequestDto): Promise<LoginResponseDto> {
     let user: User;
     try {
-      user = await this.userRepository.userByEmailWithPermissions(loginDto.email);
+      user = await this.userRepository.findByEmailWithPermissions(loginDto.email);
     } catch (error) {
       throw new NotFoundError(`User not found`);
     }
@@ -54,10 +56,10 @@ export class AuthService {
 
     const token = await generateToken(user);
     await this.updateLastLogin(user);
-    return new LoginResponseDto(user.id, user.email, token, false);
+    return new LoginResponseDto(user.id, user.email, token);
   }
 
-  public async signUp(signUpDto: SignUpRequestDto): Promise<any> {
+  public async signUp(signUpDto: SignUpRequestDto): Promise<void> {
     if (!checkRules(signUpDto.password)) {
       throw new Error('The password does not reflect the security parameters');
     }
@@ -85,26 +87,74 @@ export class AuthService {
       throw new InternalServerError(e);
     }
 
-    const company = {
-      name: signUpDto.companyName,
-      users: [insertUser],
-    };
+    if (signUpDto.companyName) {
+      const company = {
+        name: signUpDto.companyName,
+        users: [insertUser],
+      };
+
+      try {
+        await this.companyRepository.addOrUpdate(company as Company);
+      } catch (e) {
+        throw new InternalServerError(e);
+      }
+    }
+
+    await this.sendEmailToken(insertUser, signUpDto.callbackUrl, `${signUpDto.firstName} ${signUpDto.lastName}`);
+  }
+
+  public async verifyEmail(token: string, userId: string): Promise<void> {
+    const user = await this.userRepository.findById(userId);
+    if (user.emailConfirmed) {
+      throw new Error('Mail already confirmed');
+    }
+    const verificationToken = await this.tokenVerificationRepository.findOne({
+      where: { userId },
+      order: { createdAt: 'DESC' },
+    });
+    if (!verificationToken) {
+      throw new InternalServerError('Il token non esiste');
+    }
+    if (
+      new Date().getTime() >
+      verificationToken.expiredAt.getTime() - verificationToken.expiredAt.getTimezoneOffset() * 60000
+    ) {
+      throw new TokenExpiredError('Il token è scaduto', verificationToken.expiredAt);
+    }
+    if (verificationToken.token !== token) {
+      throw new BadRequestError('Il token non corrisponde');
+    }
+    user.emailConfirmed = true;
+    await this.userRepository.addOrUpdate(user);
+  }
+
+  // public async generateNewEmailToken(userEmail: string): Promise<void> {
+  //   const user = await this.userRepository.findByEmail(userEmail);
+  //   await this.sendEmailToken(user, );
+  // }
+
+  private async updateLastLogin(user: User): Promise<void> {
+    user.lastLogin = new Date();
+    await this.userRepository.addOrUpdate(user);
+  }
+
+  private async sendEmailToken(user: User, callbackUrl: string, fullName = ''): Promise<void> {
+    let token = '';
+    for (let i = 0; i < 6; i += 1) {
+      token += getRandomAlphaNumeric();
+    }
 
     try {
-      await this.companyRepository.addOrUpdate(company as Company);
+      await this.tokenVerificationRepository.addOrUpdate({ token, user } as TokenVerification);
     } catch (e) {
       throw new InternalServerError(e);
     }
 
     const emailText = `
-        <div>Dear ${signUpDto.firstName} ${signUpDto.lastName} from ${signUpDto.companyName} company</div>
+        <div>Dear ${fullName || 'user'}</div>
         </br>
-        <div>Please confirm your email at https://</div>`;
-    await sendEmail([signUpDto.email], 'Confirm email 📧', emailText);
-  }
-
-  private async updateLastLogin(user: User): Promise<void> {
-    user.lastLogin = new Date();
-    await this.userRepository.addOrUpdate(user);
+        <div>The verification code is ${token}</div>
+        <div>Go to this link and insert token to activate your account: ${callbackUrl}/${user.id}</div>`;
+    await sendEmail([user.email], 'Confirm email 📧', emailText);
   }
 }

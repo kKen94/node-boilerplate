@@ -1,5 +1,5 @@
 import { jwtEagle } from '@config';
-import { getRepo, verifySmtpAsync } from '@helper';
+import { cleanToken, getRepo, verifySmtpAsync } from '@helper';
 import { UserRepository } from '@repository';
 import { getFromContainer, MetadataStorage } from 'class-validator';
 import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
@@ -25,27 +25,34 @@ const routingControllersOptions = {
     },
   },
   authorizationChecker: async (action: Action, requestPermissions: string[]) => {
-    const token = action.request.headers['authorization'];
+    /* TODO:
+     * se ogni volta queryo l'utente da db e faccio le verifiche
+     * se è abilitato, se è eliminato fisicamente o logicamente, se è attivo...
+     * è più sicuro (e dispendioso)
+     */
+    const token: string = action.request.headers['authorization'];
     let decoded;
     try {
-      decoded = jwt.verify(token, jwtEagle.secret);
+      decoded = jwt.verify(cleanToken(token), jwtEagle.secret);
     } catch (e) {
       return false;
     }
 
     if (requestPermissions.length) {
-      const userRepository = getRepo(UserRepository);
-      const user = await userRepository.userByIdWithPermissions(decoded['id']);
+      /* TODO:
+       * se ogni volta queryo i permessi dell'utente da db è più sicuro (e dispendioso)
+       */
+      const tokenPermissions: string[] = decoded['permissions'];
       return requestPermissions.every(requestPermission =>
-        user.permissions.map(permission => permission.name).includes(requestPermission),
+        tokenPermissions.map(permission => permission).includes(requestPermission),
       );
     }
   },
   currentUserChecker: async (action: Action) => {
     const token = action.request.headers['authorization'];
-    const decoded = jwt.decode(token);
+    const decoded = jwt.decode(cleanToken(token));
     const userRepository = getRepo(UserRepository);
-    return await userRepository.getById(decoded['id']);
+    return await userRepository.findById(decoded['userId']);
   },
 };
 

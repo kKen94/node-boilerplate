@@ -18,3 +18,11 @@ export const generateToken = async (user: User): Promise<string> => {
     },
   );
 };
+
+export const cleanToken = (token: string): string => {
+  if (token.includes(' ')) {
+    const pieces = token.split(' ');
+    return pieces[pieces.length - 1];
+  }
+  return token;
+};
