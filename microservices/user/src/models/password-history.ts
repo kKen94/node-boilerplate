@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsUUID, Length } from 'class-validator';
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, RelationId } from 'typeorm';
 import { User } from './user';
 
 @Entity()
@@ -22,4 +22,7 @@ export class PasswordHistory {
     user => user.passwordHistories,
   )
   public user: User;
+
+  @RelationId((password: PasswordHistory) => password.user)
+  public userId: string;
 }

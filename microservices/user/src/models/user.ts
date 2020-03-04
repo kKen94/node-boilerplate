@@ -10,6 +10,7 @@ import {
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
+  RelationId,
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
@@ -122,9 +123,15 @@ export class User {
   @JoinColumn()
   public person: Person;
 
+  @RelationId((user: User) => user.person)
+  public personId: string;
+
   @ManyToOne(
     () => Company,
     company => company.users,
   )
   public company: Company;
+
+  @RelationId((user: User) => user.company)
+  public companyId: string;
 }

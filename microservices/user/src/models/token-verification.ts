@@ -1,5 +1,5 @@
 import { IsDate, IsNotEmpty, IsUUID, Length } from 'class-validator';
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, RelationId } from 'typeorm';
 import { User } from './user';
 
 @Entity()
@@ -19,11 +19,14 @@ export class TokenVerification {
 
   @Column({ default: () => `localtimestamp + interval '10 minute'` })
   @IsDate()
-  public tokenExpiration?: Date;
+  public expiredAt: Date;
 
   @ManyToOne(
     () => User,
     user => user.tokenVerifications,
   )
   public user: User;
+
+  @RelationId((token: TokenVerification) => token.user)
+  public userId: string;
 }
