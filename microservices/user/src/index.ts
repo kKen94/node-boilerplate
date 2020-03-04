@@ -25,6 +25,11 @@ const routingControllersOptions = {
     },
   },
   authorizationChecker: async (action: Action, requestPermissions: string[]) => {
+    /* TODO:
+     * se ogni volta queryo l'utente da db e faccio le verifiche
+     * se è abilitato, se è eliminato fisicamente o logicamente, se è attivo...
+     * è più sicuro (e dispendioso)
+     */
     const token: string = action.request.headers['authorization'];
     let decoded;
     try {
@@ -34,13 +39,12 @@ const routingControllersOptions = {
     }
 
     if (requestPermissions.length) {
-      const userRepository = getRepo(UserRepository);
-      const user = await userRepository.findByIdWithPermissions(decoded['userId']);
-      if (user && requestPermissions.includes('EMAIL.VERIFICATION')) {
-        return true;
-      }
+      /* TODO:
+       * se ogni volta queryo i permessi dell'utente da db è più sicuro (e dispendioso)
+       */
+      const tokenPermissions: string[] = decoded['permissions'];
       return requestPermissions.every(requestPermission =>
-        user.permissions.map(permission => permission.name).includes(requestPermission),
+        tokenPermissions.map(permission => permission).includes(requestPermission),
       );
     }
   },
