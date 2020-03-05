@@ -21,7 +21,10 @@
     "no-console": false,
     "no-string-literal": false,
     "no-trailing-whitespace": false,
-    "ter-arrow-parens": [true, "as-needed"]
+    "ter-arrow-parens": [true, "as-needed"],
+    "variable-name": {
+      "options": "allow-leading-underscore"
+    }
   },
   "rulesDirectory": []
 }

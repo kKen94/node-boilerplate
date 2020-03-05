@@ -119,8 +119,8 @@ export class AuthService {
     if (!verificationToken) {
       throw new InternalServerError('Il token non è stato creato');
     }
-    if (new Date() > normalizeDbDate(verificationToken.expiredAt)) {
-      throw new TokenExpiredError('Il token è scaduto', normalizeDbDate(verificationToken.expiredAt));
+    if (new Date() > verificationToken.expiredAt) {
+      throw new TokenExpiredError('Il token è scaduto', verificationToken.expiredAt);
     }
     if (verificationToken.token !== token) {
       throw new BadRequestError('Il token non corrisponde');

@@ -1,3 +1,4 @@
+import { normalizeDbDate } from '@helper';
 import { IsBoolean, IsDate, IsEmail, IsInt, IsNotEmpty, IsUUID, Length } from 'class-validator';
 import {
   Column,
@@ -34,7 +35,12 @@ export class User {
 
   @Column({ default: () => `localtimestamp + interval '3 month'` })
   @IsDate()
-  public passwordExpiration?: Date;
+  public get passwordExpiration(): Date {
+    return normalizeDbDate(this._passwordExpiration);
+  }
+  public set passwordExpiration(date: Date) {
+    this._passwordExpiration = date;
+  }
 
   @Column({ default: 3 })
   @IsInt()
@@ -69,23 +75,48 @@ export class User {
 
   @Column()
   @CreateDateColumn({ update: false })
-  public createdAt: Date;
+  public get createdAt(): Date {
+    return normalizeDbDate(this._createdAt);
+  }
+  public set createdAt(date: Date) {
+    this._createdAt = date;
+  }
 
   @Column()
   @UpdateDateColumn({ update: false })
-  public updatedAt: Date;
+  public get updatedAt(): Date {
+    return normalizeDbDate(this._updatedAt);
+  }
+  public set updatedAt(date: Date) {
+    this._updatedAt = date;
+  }
 
   @Column({ nullable: true })
   @IsDate()
-  public lastLogin?: Date;
+  public get lastLogin(): Date {
+    return normalizeDbDate(this._lastLogin);
+  }
+  public set lastLogin(date: Date) {
+    this._lastLogin = date;
+  }
 
   @Column({ nullable: true })
   @IsDate()
-  public activeFrom?: Date;
+  public get activeFrom(): Date {
+    return normalizeDbDate(this._activeFrom);
+  }
+  public set activeFrom(date: Date) {
+    this._activeFrom = date;
+  }
 
   @Column({ nullable: true })
   @IsDate()
-  public activeTo?: Date;
+  public get activeTo(): Date {
+    return normalizeDbDate(this._activeTo);
+  }
+  public set activeTo(date: Date) {
+    this._activeTo = date;
+  }
 
   @Column({ default: true })
   @IsBoolean()
@@ -134,4 +165,13 @@ export class User {
 
   @RelationId((user: User) => user.company)
   public companyId: string;
+
+  /***********************************************/
+
+  private _createdAt: Date;
+  private _updatedAt: Date;
+  private _lastLogin?: Date;
+  private _activeFrom?: Date;
+  private _activeTo?: Date;
+  private _passwordExpiration?: Date;
 }
