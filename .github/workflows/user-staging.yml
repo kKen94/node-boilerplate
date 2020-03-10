@@ -51,7 +51,7 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
       - name: Create aws repo if not exist
-        run: aws ecr describe-repositories --repository-names staging || aws ecr create-repository --repository-name staging --region eu-central-1
+        run: aws ecr describe-repositories --repository-names user.api-staging || aws ecr create-repository --repository-name user.api-staging --region eu-central-1
       - name: Build and push image
         id: build-image
         env:
@@ -59,4 +59,4 @@ jobs:
         run: |
           cd microservices/user
           yarn run docker:build:staging
-          docker push $ECR_REGISTRY/staging:user_api
+          docker push $ECR_REGISTRY/user.api-staging
