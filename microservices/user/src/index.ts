@@ -89,7 +89,7 @@ createConnection(process.env.NODE_ENV)
     app.use(e2k(swStats.getMiddleware({ swaggerSpec: spec })));
 
     app.listen(3001, async () => {
-      await verifySmtpAsync();
+      // await verifySmtpAsync();
       await seed(connection);
       console.log('Server started on port 3001 😎');
     });

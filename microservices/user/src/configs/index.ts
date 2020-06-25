@@ -10,9 +10,10 @@ export const superUser = {
 };
 
 export const smtp = {
-  host: 'smtp-relay.gmail.com',
+  host: 'smtp.t2c.dev',
   port: 465,
   secure: true,
   user: 'developer@t2c.dev',
-  password: 'Eagle_developer_2020',
+  password: 'Eagle_developer_2020@',
+  rejectUnauthorized: false,
 };
