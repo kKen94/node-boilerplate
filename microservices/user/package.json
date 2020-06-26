@@ -26,6 +26,7 @@
       "ts-node": "^8.5.0",
       "ts-node-dev": "^1.0.0-pre.43",
       "tsconfig-paths": "^3.9.0",
+      "tsconfig-paths-webpack-plugin": "^3.2.0",
       "tslint": "^6.1.2",
       "tslint-config-airbnb": "^5.11.2",
       "tslint-config-prettier": "^1.18.0",
@@ -63,7 +64,9 @@
    },
    "scripts": {
       "start": "yarn run database:update && yarn run run",
-      "build": "cross-env NODE_ENV=dev tsc",
+      "build": "yarn run build:app && yarn run build:ormconfig && yarn run build:migrations",
+      "build:app": "webpack --config webpack.config.js",
+      "build:ormconfig": "webpack --config webpack.ormconfig.config.js",
       "build:migrations": "webpack --config webpack.migration.config.js",
       "lint": "tslint --project tsconfig.json",
       "run": "set debug=* && cross-env NODE_ENV=dev ts-node-dev --respawn --transpileOnly -r tsconfig-paths/register ./src/index.ts",
@@ -76,8 +79,8 @@
       "format:check": "prettier --list-different \"src/**/*.{ts,tsx}\"",
       "format:write": "prettier --write \"src/**/*.{ts,tsx}\"",
       "docker:build:dev": "docker build --no-cache -t user.api --build-arg NODE_ENV=dev .",
-      "docker:build:staging": "docker build --no-cache -t user.api-staging --build-arg APP_ENV=staging --build-arg DB_SYNC=true --build-arg DB_URL= .",
-      "docker:build:prod": "docker build --no-cache -t user.api-prod --build-arg APP_ENV=prod --build-arg DB_SYNC=false --build-arg DB_URL=dadefinire ."
+      "docker:build:staging": "docker build --no-cache -t user.api-staging --build-arg APP_ENV=staging .",
+      "docker:build:prod": "docker build --no-cache -t user.api-prod --build-arg APP_ENV=prod ."
    },
    "husky": {
       "hooks": {

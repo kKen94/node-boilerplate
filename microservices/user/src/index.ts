@@ -16,11 +16,13 @@ import { routingControllersToSpec } from 'routing-controllers-openapi';
 import * as swStats from 'swagger-stats';
 import { createConnection } from 'typeorm';
 import { seed } from './seeds/seed';
+import { CONTROLLERS } from '@controllers';
+import { MIDDLEWARES } from '@middlewares';
 
 const routingControllersOptions = {
   // routePrefix: '/api',
-  controllers: [`${__dirname}/controllers/**/*.ts`],
-  middlewares: [`${__dirname}/middlewares/**/*.ts`],
+  controllers: CONTROLLERS,
+  middlewares: MIDDLEWARES,
   defaults: {
     nullResultCode: 404,
     undefinedResultCode: 204,

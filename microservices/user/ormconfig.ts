@@ -1,4 +1,4 @@
-import * as entities from '@entity';
+import { ENTITIES } from '@entity';
 
 export = [
   {
@@ -8,7 +8,7 @@ export = [
     url: 'postgresql://postgres:postgres@user-data:5432/user',
     synchronize: 'true',
     logging: true,
-    entities,
+    entities: ENTITIES,
     migrations: [
       'src/migrations/**/*.ts',
       'migrations/**/*.js',
@@ -26,7 +26,7 @@ export = [
     url: 'postgres://kleqlggk:XMMZZWS_9Ec4E1_3n9hNAxAn76MOJqxS@rogue.db.elephantsql.com:5432/kleqlggk',
     synchronize: 'true',
     logging: true,
-    entities,
+    entities: ENTITIES,
     migrations: [
       'src/migrations/**/*.ts',
       'migrations/**/*.js',
@@ -44,7 +44,7 @@ export = [
     url: 'postgres://dadefinire',
     synchronize: 'false',
     logging: true,
-    entities,
+    entities: ENTITIES,
     migrations: [
       'src/migrations/**/*.ts',
       'migrations/**/*.js',
