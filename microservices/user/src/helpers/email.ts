@@ -9,6 +9,9 @@ const transporter = nodemailer.createTransport({
     user: smtp.user,
     pass: smtp.password,
   },
+  tls: {
+    rejectUnauthorized: smtp.rejectUnauthorized
+  }
 });
 
 export const verifySmtpAsync = () => {
