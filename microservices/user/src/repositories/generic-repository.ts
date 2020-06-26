@@ -10,21 +10,31 @@ import {
 import { SaveOptions } from 'typeorm/repository/SaveOptions';
 
 export class GenericRepository<T> extends AbstractRepository<T> {
-  public async find(options?: FindManyOptions<T> | FindConditions<T>): Promise<T[]> {
+  public async find(
+    options?: FindManyOptions<T> | FindConditions<T>,
+  ): Promise<T[]> {
     return await this.repository.find(options);
   }
 
-  public async findAndCount(options?: FindManyOptions<T> | FindConditions<T>): Promise<[T[], number]> {
+  public async findAndCount(
+    options?: FindManyOptions<T> | FindConditions<T>,
+  ): Promise<[T[], number]> {
     return await this.repository.findAndCount(options);
   }
 
-  public async findOne(options: FindOneOptions<T>, conditions?: FindConditions<T>): Promise<T> {
+  public async findOne(
+    options: FindOneOptions<T>,
+    conditions?: FindConditions<T>,
+  ): Promise<T> {
     return conditions
       ? await this.repository.findOneOrFail(conditions, options)
       : await this.repository.findOneOrFail(options);
   }
 
-  public async findById<TKey>(id: TKey, options?: FindOneOptions<T>): Promise<T> {
+  public async findById<TKey>(
+    id: TKey,
+    options?: FindOneOptions<T>,
+  ): Promise<T> {
     return await this.repository.findOneOrFail(id, options);
   }
 
@@ -54,7 +64,10 @@ export class GenericRepository<T> extends AbstractRepository<T> {
     return await this.repository.save(entity, options);
   }
 
-  public async addOrUpdateRange(entities: T[], options?: SaveOptions): Promise<T[]> {
+  public async addOrUpdateRange(
+    entities: T[],
+    options?: SaveOptions,
+  ): Promise<T[]> {
     return await this.repository.save(entities, options);
   }
 
@@ -62,11 +75,15 @@ export class GenericRepository<T> extends AbstractRepository<T> {
     return await this.repository.delete(entityId);
   }
 
-  public async deleteRange(entitiesId: string[] | number[]): Promise<DeleteResult> {
+  public async deleteRange(
+    entitiesId: string[] | number[],
+  ): Promise<DeleteResult> {
     return await this.repository.delete(entitiesId);
   }
 
   public async any(options?: FindOneOptions<T>): Promise<boolean> {
-    return options ? !!(await this.repository.findOne(options)) : !!(await this.repository.findOne());
+    return options
+      ? !!(await this.repository.findOne(options))
+      : !!(await this.repository.findOne());
   }
 }

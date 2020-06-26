@@ -10,7 +10,9 @@ export const seedUser = async (connection: Connection): Promise<void> => {
   const anyUsers = await userRepo.find();
   if (!anyUsers.length) {
     const permissionRepo = connection.getCustomRepository(PermissionRepository);
-    const superPermission = await permissionRepo.findOne({ where: { name: 'SUPER.ADMIN' } });
+    const superPermission = await permissionRepo.findOne({
+      where: { name: 'SUPER.ADMIN' },
+    });
     user.permissions = [superPermission];
     await userRepo.addOrUpdate(user as User);
     console.log('...User seeded!');

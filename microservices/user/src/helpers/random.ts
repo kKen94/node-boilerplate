@@ -33,6 +33,10 @@ export const getRandomAlphaNumeric = (): string => {
   const numericRange: Range = { min: 48, max: 57 };
   const upperCaseRange: Range = { min: 65, max: 90 };
   const lowerCaseRange: Range = { min: 97, max: 122 };
-  const randomASCII = getRandomIntFromRange(numericRange, upperCaseRange, lowerCaseRange);
+  const randomASCII = getRandomIntFromRange(
+    numericRange,
+    upperCaseRange,
+    lowerCaseRange,
+  );
   return String.fromCharCode(randomASCII);
 };

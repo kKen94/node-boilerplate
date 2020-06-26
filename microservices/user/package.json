@@ -16,16 +16,23 @@
       "@types/koa__cors": "^3.0.1",
       "@types/node": "^14.0.14",
       "cross-env": "^7.0.0",
+      "glob": "^7.1.6",
       "husky": "^4.0.9",
       "lint-staged": "^10.0.2",
       "prettier": "^2.0.5",
+      "pretty-quick": "^2.0.1",
+      "terser-webpack-plugin": "^3.0.6",
+      "ts-loader": "^7.0.5",
       "ts-node": "^8.5.0",
       "ts-node-dev": "^1.0.0-pre.43",
       "tsconfig-paths": "^3.9.0",
       "tslint": "^6.1.2",
       "tslint-config-airbnb": "^5.11.2",
       "tslint-config-prettier": "^1.18.0",
-      "typescript": "^3.7.2"
+      "typescript": "^3.7.2",
+      "webpack": "^4.43.0",
+      "webpack-cli": "^3.3.12",
+      "webpack-filter-warnings-plugin": "^1.2.1"
    },
    "dependencies": {
       "@koa/cors": "^3.0.0",
@@ -56,7 +63,8 @@
    },
    "scripts": {
       "start": "yarn run database:update && yarn run run",
-      "build": "cross-env NODE_ENV=dev tsc -b",
+      "build": "cross-env NODE_ENV=dev tsc",
+      "build:migrations": "webpack --config webpack.migration.config.js",
       "lint": "tslint --project tsconfig.json",
       "run": "set debug=* && cross-env NODE_ENV=dev ts-node-dev --respawn --transpileOnly -r tsconfig-paths/register ./src/index.ts",
       "migration:add": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:generate -n",
@@ -68,8 +76,6 @@
       "format:check": "prettier --list-different \"src/**/*.{ts,tsx}\"",
       "format:write": "prettier --write \"src/**/*.{ts,tsx}\"",
       "docker:build:dev": "docker build --no-cache -t user.api --build-arg NODE_ENV=dev .",
-
-
       "docker:build:staging": "docker build --no-cache -t user.api-staging --build-arg APP_ENV=staging --build-arg DB_SYNC=true --build-arg DB_URL= .",
       "docker:build:prod": "docker build --no-cache -t user.api-prod --build-arg APP_ENV=prod --build-arg DB_SYNC=false --build-arg DB_URL=dadefinire ."
    },
@@ -86,7 +92,7 @@
    },
    "lint-staged": {
       "src/**/*.ts": [
-         "prettier --write",
+         "pretty-quick --staged --pattern \"src/**/*.{ts,tsx}\"",
          "git add"
       ]
    },

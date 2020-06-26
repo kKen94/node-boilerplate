@@ -10,8 +10,8 @@ const transporter = nodemailer.createTransport({
     pass: smtp.password,
   },
   tls: {
-    rejectUnauthorized: smtp.rejectUnauthorized
-  }
+    rejectUnauthorized: smtp.rejectUnauthorized,
+  },
 });
 
 export const verifySmtpAsync = () => {
@@ -27,7 +27,11 @@ export const verifySmtpAsync = () => {
   });
 };
 
-export const sendEmail = async (to: string[], subject: string, text: string) => {
+export const sendEmail = async (
+  to: string[],
+  subject: string,
+  text: string,
+) => {
   const email: any = {
     subject,
     from: '"Restify  📅" <noreply@t2c.dev>', // sender address
