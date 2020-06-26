@@ -1,6 +1,26 @@
 import { ENTITIES } from '@entity';
 
 export = [
+  /*** per lo sviluppo in localhost con il db persistente ****/
+  {
+    environment: 'dev',
+    name: 'development',
+    type: 'postgres',
+    url: 'postgresql://postgres:postgres@localhost:54321/user',
+    synchronize: 'true',
+    logging: true,
+    entities: ENTITIES,
+    migrations: [
+      'src/migrations/**/*.ts',
+      'migrations/**/*.js',
+    ],
+    cli: {
+      entitiesDir: 'src/models',
+      migrationsDir: 'src/migrations',
+    },
+    migrationsTableName: '_migration_table',
+  },
+  /****** da qui in poi sono per le build, ricordarsi i node_env ******/
   {
     environment: 'dev',
     name: 'dev',
