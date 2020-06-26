@@ -1,13 +1,7 @@
 FROM node:12-alpine
 
-ARG APP_ENV
-ENV APP_ENV=${APP_ENV}
-
-ARG DB_URL
-ENV DB_URL=${DB_URL}
-
-ARG DB_SYNC
-ENV DB_SYNC=${DB_SYNC}
+ARG NODE_ENV
+ENV NODE_ENV=${NODE_ENV}
 
 WORKDIR /usr/src/app
 
@@ -33,4 +27,4 @@ CMD [ "yarn", "run", "dockerfile:cmd" ]
 #FROM node:12-alpine
 #WORKDIR /app
 #COPY --from=builder /app ./
-#CMD ["yarn", "run", "start"]
+#ENTRYPOINT ["node", "index.js"]

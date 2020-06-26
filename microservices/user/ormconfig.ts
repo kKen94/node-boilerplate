@@ -1,18 +1,78 @@
-export =
+import { ENTITIES } from '@entity';
+
+export = [
+  /*** per lo sviluppo in localhost con il db persistente ****/
   {
-    environment: process.env.NODE_ENV,
-    name: process.env.NODE_ENV,
+    environment: 'dev',
+    name: 'development',
     type: 'postgres',
-    url: process.env.DB_URL || 'postgresql://postgres:postgres@localhost:54321/user',
-    synchronize: 'true' === process.env.DB_SYNC,
+    url: 'postgresql://postgres:postgres@localhost:54321/user',
+    synchronize: 'true',
     logging: true,
-    entities: ['src/models/**/*.ts'],
-    migrations: ['src/migrations/**/*.ts'],
-    subscribers: ['src/subscriber/**/*.ts'],
+    entities: ENTITIES,
+    migrations: [
+      'src/migrations/**/*.ts',
+      'migrations/**/*.js',
+    ],
     cli: {
       entitiesDir: 'src/models',
       migrationsDir: 'src/migrations',
-      subscribersDir: 'src/subscriber',
     },
     migrationsTableName: '_migration_table',
-  };
+  },
+  /****** da qui in poi sono per le build, ricordarsi i node_env ******/
+  {
+    environment: 'dev',
+    name: 'dev',
+    type: 'postgres',
+    url: 'postgresql://postgres:postgres@user-data:5432/user',
+    synchronize: 'true',
+    logging: true,
+    entities: ENTITIES,
+    migrations: [
+      'src/migrations/**/*.ts',
+      'migrations/**/*.js',
+    ],
+    cli: {
+      entitiesDir: 'src/models',
+      migrationsDir: 'src/migrations',
+    },
+    migrationsTableName: '_migration_table',
+  },
+  {
+    environment: 'staging',
+    name: 'staging',
+    type: 'postgres',
+    url: 'postgres://kleqlggk:XMMZZWS_9Ec4E1_3n9hNAxAn76MOJqxS@rogue.db.elephantsql.com:5432/kleqlggk',
+    synchronize: 'true',
+    logging: true,
+    entities: ENTITIES,
+    migrations: [
+      'src/migrations/**/*.ts',
+      'migrations/**/*.js',
+    ],
+    cli: {
+      entitiesDir: 'src/models',
+      migrationsDir: 'src/migrations',
+    },
+    migrationsTableName: '_migration_table',
+  },
+  {
+    environment: 'prod',
+    name: 'prod',
+    type: 'postgres',
+    url: 'postgres://dadefinire',
+    synchronize: 'false',
+    logging: true,
+    entities: ENTITIES,
+    migrations: [
+      'src/migrations/**/*.ts',
+      'migrations/**/*.js',
+    ],
+    cli: {
+      entitiesDir: 'src/models',
+      migrationsDir: 'src/migrations',
+    },
+    migrationsTableName: '_migration_table',
+  },
+];

@@ -1,6 +1,13 @@
 import { normalizeDbDate } from '@helper';
 import { IsNotEmpty, IsUUID, Length } from 'class-validator';
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, RelationId } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  RelationId,
+} from 'typeorm';
 import { User } from './user';
 
 @Entity()
@@ -23,10 +30,7 @@ export class PasswordHistory {
     this._createdAt = date;
   }
 
-  @ManyToOne(
-    () => User,
-    user => user.passwordHistories,
-  )
+  @ManyToOne(() => User, user => user.passwordHistories)
   public user: User;
 
   @RelationId((password: PasswordHistory) => password.user)

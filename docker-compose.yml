@@ -1,37 +1,70 @@
 version: '3.7'
 
 services:
-  user_api_dev:
+  user.api:
+    container_name: user.api
+    image: ${REGISTRY:-rendify}/user.api:${PLATFORM:-linux}-${TAG:-latest}
     build:
-      context: ./microservices/user
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: microservices/user/Dockerfile
       args:
-        - APP_ENV=dev
-        - DB_SYNC=true
-        - DB_URL=postgresql://postgres:postgres@postgres_user_dev:5432/user
+        - NODE_ENV=dev
     depends_on:
-      - postgres_user_dev
-      - rabbit_dev
+      - user-data
+      - rabbit
     ports:
       - "3001:3001"
-    container_name: user_api_dev
     networks:
       - t2c-api-dev
 
-  postgres_user_dev:
+  user-data:
     image: postgres:11.5
     networks:
       - t2c-api-dev
-    container_name: postgres_user_dev
+    container_name: user-data
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=user
 
-  rabbit_dev:
-    image: rabbitmq:3
+  kong:
+    image: kong
+    container_name: kong
+    build:
+      context: .
+      dockerfile: src/gateways/kong/Dockerfile
+    environment:
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN:0.0.0.0:8001, 0.0.0.0:8444 ssl
+      KONG_DECLARATIVE_CONFIG: /usr/local/kong/declarative/kong.yml
+      KONG_DATABASE: off
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+    networks:
+      - kong-net
+      - api-dev
+    volumes:
+      - kong_data:/usr/local/kong/declarative
+    ports:
+      - "8000:8000/tcp"
+      - "127.0.0.1:8001:8001/tcp"
+      - "8443:8443/tcp"
+      - "127.0.0.1:8444:8444/tcp"
+    healthcheck:
+      test: ["CMD", "kong", "health"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+    restart: on-failure
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+  rabbit:
+    image: rabbitmq:3-management-alpine
     networks:
       - t2c-api-dev
-    container_name: rabbit_dev
+    container_name: rabbit
     environment:
       - RABBITMQ_DEFAULT_USER=rabbit_user
       - RABBITMQ_DEFAULT_PASS=Rabbit_123

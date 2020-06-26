@@ -7,16 +7,22 @@ import * as e2k from 'express-to-koa';
 import * as jwt from 'jsonwebtoken';
 import * as koaSwagger from 'koa2-swagger-ui';
 import 'reflect-metadata';
-import { Action, createKoaServer, getMetadataArgsStorage } from 'routing-controllers';
+import {
+  Action,
+  createKoaServer,
+  getMetadataArgsStorage,
+} from 'routing-controllers';
 import { routingControllersToSpec } from 'routing-controllers-openapi';
 import * as swStats from 'swagger-stats';
 import { createConnection } from 'typeorm';
 import { seed } from './seeds/seed';
+import { CONTROLLERS } from '@controllers';
+import { MIDDLEWARES } from '@middlewares';
 
 const routingControllersOptions = {
   // routePrefix: '/api',
-  controllers: [`${__dirname}/controllers/**/*.ts`],
-  middlewares: [`${__dirname}/middlewares/**/*.ts`],
+  controllers: CONTROLLERS,
+  middlewares: MIDDLEWARES,
   defaults: {
     nullResultCode: 404,
     undefinedResultCode: 204,
@@ -24,7 +30,10 @@ const routingControllersOptions = {
       required: true,
     },
   },
-  authorizationChecker: async (action: Action, requestPermissions: string[]) => {
+  authorizationChecker: async (
+    action: Action,
+    requestPermissions: string[],
+  ) => {
     /* TODO:
      * se ogni volta queryo l'utente da db e faccio le verifiche
      * se è abilitato, se è eliminato fisicamente o logicamente, se è attivo...
@@ -44,7 +53,9 @@ const routingControllersOptions = {
        */
       const tokenPermissions: string[] = decoded['permissions'];
       return requestPermissions.every(requestPermission =>
-        tokenPermissions.map(permission => permission).includes(requestPermission),
+        tokenPermissions
+          .map(permission => permission)
+          .includes(requestPermission),
       );
     }
   },
@@ -61,29 +72,34 @@ createConnection(process.env.NODE_ENV)
     const app = createKoaServer(routingControllersOptions);
 
     // Parse class-validator classes into JSON Schema:
-    const metadatas = (getFromContainer(MetadataStorage) as any).validationMetadatas;
-    const schemas = validationMetadatasToSchemas(metadatas, {
+    const metadatas = (getFromContainer(MetadataStorage) as any)
+      .validationMetadatas;
+    const schemas = validationMetadatasToSchemas({
       refPointerPrefix: '#/components/schemas/',
     });
 
     // Parse routing-controllers classes into OpenAPI spec:
     const storage = getMetadataArgsStorage();
-    const spec = routingControllersToSpec(storage as any, routingControllersOptions, {
-      components: {
-        schemas,
-        securitySchemes: {
-          basicAuth: {
-            scheme: 'basic',
-            type: 'http',
+    const spec = routingControllersToSpec(
+      storage as any,
+      routingControllersOptions,
+      {
+        components: {
+          schemas,
+          securitySchemes: {
+            basicAuth: {
+              scheme: 'basic',
+              type: 'http',
+            },
           },
         },
+        info: {
+          description: 'Generated with `routing-controllers-openapi`',
+          title: 'A sample API',
+          version: '1.0.0',
+        },
       },
-      info: {
-        description: 'Generated with `routing-controllers-openapi`',
-        title: 'A sample API',
-        version: '1.0.0',
-      },
-    });
+    );
     // @ts-ignore
     app.use(koaSwagger({ routePrefix: '/swagger', swaggerOptions: { spec } }));
     app.use(e2k(swStats.getMiddleware({ swaggerSpec: spec })));

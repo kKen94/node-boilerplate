@@ -1,11 +1,11 @@
 version: "3.7"
 services:
 
-  postgres_user_persistent:
+  user-data:
     image: postgres:11.5
     networks:
       - t2c-persistent
-    container_name: postgres_user_persistent
+    container_name: user-data
     ports:
       - "54321:5432"
     restart: always

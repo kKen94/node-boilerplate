@@ -24,7 +24,9 @@ export class AuthController {
 
   @Post('/login')
   @HttpCode(200)
-  public async login(@Body() loginDto: LoginRequestDto): Promise<LoginResponseDto> {
+  public async login(
+    @Body() loginDto: LoginRequestDto,
+  ): Promise<LoginResponseDto> {
     return await this.authService.login(loginDto);
   }
 
@@ -36,7 +38,10 @@ export class AuthController {
 
   @Get('/verify-email/:userId')
   @HttpCode(200)
-  public async verifyEmail(@Param('userId') userId: string, @QueryParam('token') token: string): Promise<void> {
+  public async verifyEmail(
+    @Param('userId') userId: string,
+    @QueryParam('token') token: string,
+  ): Promise<void> {
     return await this.authService.verifyEmail(token, userId);
   }
 

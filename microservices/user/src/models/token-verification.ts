@@ -1,6 +1,13 @@
 import { normalizeDbDate } from '@helper';
 import { IsDate, IsNotEmpty, IsUUID, Length } from 'class-validator';
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, RelationId } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  RelationId,
+} from 'typeorm';
 import { User } from './user';
 
 @Entity()
@@ -32,10 +39,7 @@ export class TokenVerification {
     this._expiredAt = date;
   }
 
-  @ManyToOne(
-    () => User,
-    user => user.tokenVerifications,
-  )
+  @ManyToOne(() => User, user => user.tokenVerifications)
   public user: User;
 
   @RelationId((token: TokenVerification) => token.user)

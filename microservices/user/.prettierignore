@@ -1,7 +1,6 @@
 .idea/
 node_modules/
 yarn.lock
-src/migrations/
 tsconfig.json
 tslint.json
 yarn.lock

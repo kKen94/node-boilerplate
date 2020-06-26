@@ -1,5 +1,11 @@
 import { IsNotEmpty, IsUUID, Length } from 'class-validator';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm';
 import { User } from './user';
 
 @Entity()
@@ -18,9 +24,6 @@ export class Company {
   @Length(0, 30)
   public vatNumber: string;
 
-  @OneToMany(
-    () => User,
-    user => user.company,
-  )
+  @OneToMany(() => User, user => user.company)
   public users: User[];
 }

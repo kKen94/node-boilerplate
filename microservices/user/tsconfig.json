@@ -21,7 +21,9 @@
          "@dto": ["src/models/dto/index.ts"],
          "@config": ["src/configs/index.ts"],
          "@repository": ["src/repositories/index.ts"],
-         "@service": ["src/services/index.ts"]
+         "@service": ["src/services/index.ts"],
+         "@controllers": ["src/controllers/index.ts"],
+         "@middlewares": ["src/middlewares/index.ts"]
       }
    }
 }

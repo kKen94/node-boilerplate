@@ -9,9 +9,19 @@ import {
   hashPassword,
   sendEmail,
 } from '@helper';
-import { CompanyRepository, PermissionRepository, TokenVerificationRepository, UserRepository } from '@repository';
+import {
+  CompanyRepository,
+  PermissionRepository,
+  TokenVerificationRepository,
+  UserRepository,
+} from '@repository';
 import { TokenExpiredError } from 'jsonwebtoken';
-import { BadRequestError, InternalServerError, NotFoundError, UnauthorizedError } from 'routing-controllers';
+import {
+  BadRequestError,
+  InternalServerError,
+  NotFoundError,
+  UnauthorizedError,
+} from 'routing-controllers';
 import { injectable } from 'tsyringe';
 import { normalizeDbDate } from '../helpers/date';
 
@@ -20,12 +30,16 @@ export class AuthService {
   private readonly userRepository = getRepo(UserRepository);
   private readonly permissionRepository = getRepo(PermissionRepository);
   private readonly companyRepository = getRepo(CompanyRepository);
-  private readonly tokenVerificationRepository = getRepo(TokenVerificationRepository);
+  private readonly tokenVerificationRepository = getRepo(
+    TokenVerificationRepository,
+  );
 
   public async login(loginDto: LoginRequestDto): Promise<LoginResponseDto> {
     let user: User;
     try {
-      user = await this.userRepository.findByEmailWithPermissions(loginDto.email);
+      user = await this.userRepository.findByEmailWithPermissions(
+        loginDto.email,
+      );
     } catch (error) {
       throw new NotFoundError(`User not found`);
     }
@@ -34,7 +48,9 @@ export class AuthService {
       throw new NotFoundError(`User not found`);
     }
 
-    if (!checkIfUnencryptedPasswordIsValid(loginDto.password, user.passwordHash)) {
+    if (
+      !checkIfUnencryptedPasswordIsValid(loginDto.password, user.passwordHash)
+    ) {
       throw new UnauthorizedError('Password wrong');
     }
 
@@ -43,15 +59,18 @@ export class AuthService {
     }
 
     const validateActiveDate =
-      (normalizeDbDate(user.activeFrom) <= new Date() || !normalizeDbDate(user.activeFrom)) &&
-      (normalizeDbDate(user.activeTo) > new Date() || !normalizeDbDate(user.activeTo));
+      (normalizeDbDate(user.activeFrom) <= new Date() ||
+        !normalizeDbDate(user.activeFrom)) &&
+      (normalizeDbDate(user.activeTo) > new Date() ||
+        !normalizeDbDate(user.activeTo));
 
     if (!validateActiveDate || !user.active) {
       throw new Error('User not active');
     }
 
     const resetPassword =
-      (normalizeDbDate(user.passwordExpiration) && normalizeDbDate(user.passwordExpiration) <= new Date()) ||
+      (normalizeDbDate(user.passwordExpiration) &&
+        normalizeDbDate(user.passwordExpiration) <= new Date()) ||
       user.forceResetPassword;
 
     if (resetPassword) {
@@ -75,7 +94,9 @@ export class AuthService {
 
     // TODO: controllo paramenti password
 
-    const adminPermission = await this.permissionRepository.findOne({ where: { name: 'ADMIN' } });
+    const adminPermission = await this.permissionRepository.findOne({
+      where: { name: 'ADMIN' },
+    });
     const user = {
       email: signUpDto.email,
       passwordHash: hashPassword(signUpDto.password),
@@ -104,7 +125,11 @@ export class AuthService {
       }
     }
 
-    await this.sendEmailToken(insertUser, signUpDto.callbackUrl, `${signUpDto.firstName} ${signUpDto.lastName}`);
+    await this.sendEmailToken(
+      insertUser,
+      signUpDto.callbackUrl,
+      `${signUpDto.firstName} ${signUpDto.lastName}`,
+    );
   }
 
   public async verifyEmail(token: string, userId: string): Promise<void> {
@@ -120,7 +145,10 @@ export class AuthService {
       throw new InternalServerError('Il token non è stato creato');
     }
     if (new Date() > verificationToken.expiredAt) {
-      throw new TokenExpiredError('Il token è scaduto', verificationToken.expiredAt);
+      throw new TokenExpiredError(
+        'Il token è scaduto',
+        verificationToken.expiredAt,
+      );
     }
     if (verificationToken.token !== token) {
       throw new BadRequestError('Il token non corrisponde');
@@ -139,14 +167,21 @@ export class AuthService {
     await this.userRepository.addOrUpdate(user);
   }
 
-  private async sendEmailToken(user: User, callbackUrl: string, fullName = ''): Promise<void> {
+  private async sendEmailToken(
+    user: User,
+    callbackUrl: string,
+    fullName = '',
+  ): Promise<void> {
     let token = '';
     for (let i = 0; i < 6; i += 1) {
       token += getRandomAlphaNumeric();
     }
 
     try {
-      await this.tokenVerificationRepository.addOrUpdate({ token, user } as TokenVerification);
+      await this.tokenVerificationRepository.addOrUpdate({
+        token,
+        user,
+      } as TokenVerification);
     } catch (e) {
       throw new InternalServerError(e);
     }
@@ -155,7 +190,9 @@ export class AuthService {
         <div>Dear ${fullName || 'user'}</div>
         </br>
         <div>The verification code is ${token}</div>
-        <div>Go to this link and insert token to activate your account: ${callbackUrl}/${user.id}</div>`;
+        <div>Go to this link and insert token to activate your account: ${callbackUrl}/${
+      user.id
+    }</div>`;
     await sendEmail([user.email], 'Confirm email 📧', emailText);
   }
 }

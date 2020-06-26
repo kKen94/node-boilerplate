@@ -18,9 +18,6 @@ export class Person {
   @Length(0, 50)
   public lastName: string;
 
-  @OneToOne(
-    () => User,
-    user => user.person,
-  )
+  @OneToOne(() => User, user => user.person)
   public user: User;
 }

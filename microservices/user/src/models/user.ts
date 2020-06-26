@@ -1,5 +1,13 @@
 import { normalizeDbDate } from '@helper';
-import { IsBoolean, IsDate, IsEmail, IsInt, IsNotEmpty, IsUUID, Length } from 'class-validator';
+import {
+  IsBoolean,
+  IsDate,
+  IsEmail,
+  IsInt,
+  IsNotEmpty,
+  IsUUID,
+  Length,
+} from 'class-validator';
 import {
   Column,
   CreateDateColumn,
@@ -131,36 +139,25 @@ export class User {
   )
   public tokenVerifications: TokenVerification[];
 
-  @OneToMany(
-    () => PasswordHistory,
-    passwordHistory => passwordHistory.user,
-    { cascade: true },
-  )
+  @OneToMany(() => PasswordHistory, passwordHistory => passwordHistory.user, {
+    cascade: true,
+  })
   public passwordHistories: PasswordHistory[];
 
-  @ManyToMany(
-    () => Permission,
-    permission => permission.users,
-    { cascade: true },
-  )
+  @ManyToMany(() => Permission, permission => permission.users, {
+    cascade: true,
+  })
   @JoinTable()
   public permissions: Permission[];
 
-  @OneToOne(
-    () => Person,
-    person => person.user,
-    { cascade: true },
-  )
+  @OneToOne(() => Person, person => person.user, { cascade: true })
   @JoinColumn()
   public person: Person;
 
   @RelationId((user: User) => user.person)
   public personId: string;
 
-  @ManyToOne(
-    () => Company,
-    company => company.users,
-  )
+  @ManyToOne(() => Company, company => company.users)
   public company: Company;
 
   @RelationId((user: User) => user.company)

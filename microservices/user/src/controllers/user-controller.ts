@@ -1,7 +1,17 @@
 import { UserAddDto, UserUpdateDto } from '@dto';
 import { User } from '@entity';
 import { UserService } from '@service';
-import { Authorized, Body, Delete, Get, HttpCode, JsonController, Param, Post, Put } from 'routing-controllers';
+import {
+  Authorized,
+  Body,
+  Delete,
+  Get,
+  HttpCode,
+  JsonController,
+  Param,
+  Post,
+  Put,
+} from 'routing-controllers';
 import { container } from 'tsyringe';
 import { DeleteResult } from 'typeorm';
 
@@ -36,7 +46,10 @@ export class UserController {
   @Authorized()
   @HttpCode(204)
   @Put('/:id')
-  public async update(@Param('id') id: string, @Body() userDto: UserUpdateDto): Promise<void> {
+  public async update(
+    @Param('id') id: string,
+    @Body() userDto: UserUpdateDto,
+  ): Promise<void> {
     await this.userService.update(id, userDto);
   }
 
