@@ -56,7 +56,7 @@
    },
    "scripts": {
       "start": "yarn run database:update && yarn run run",
-      "build": "cross-env NODE_ENV=dev tsc",
+      "build": "cross-env NODE_ENV=dev tsc -b",
       "lint": "tslint --project tsconfig.json",
       "run": "set debug=* && cross-env NODE_ENV=dev ts-node-dev --respawn --transpileOnly -r tsconfig-paths/register ./src/index.ts",
       "migration:add": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:generate -n",

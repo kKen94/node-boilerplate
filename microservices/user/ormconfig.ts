@@ -1,3 +1,5 @@
+import * as entities from '@entity';
+
 export = [
   {
     environment: 'dev',
@@ -6,13 +8,11 @@ export = [
     url: 'postgresql://postgres:postgres@user-data:5432/user',
     synchronize: 'true',
     logging: true,
-    entities: ['src/models/**/*.ts'],
+    entities: entities,
     migrations: ['src/migrations/**/*.ts'],
-    subscribers: ['src/subscriber/**/*.ts'],
     cli: {
       entitiesDir: 'src/models',
       migrationsDir: 'src/migrations',
-      subscribersDir: 'src/subscriber',
     },
     migrationsTableName: '_migration_table',
   },
@@ -23,13 +23,11 @@ export = [
     url: 'postgres://kleqlggk:XMMZZWS_9Ec4E1_3n9hNAxAn76MOJqxS@rogue.db.elephantsql.com:5432/kleqlggk',
     synchronize: 'true',
     logging: true,
-    entities: ['src/models/**/*.ts'],
+    entities: entities,
     migrations: ['src/migrations/**/*.ts'],
-    subscribers: ['src/subscriber/**/*.ts'],
     cli: {
       entitiesDir: 'src/models',
       migrationsDir: 'src/migrations',
-      subscribersDir: 'src/subscriber',
     },
     migrationsTableName: '_migration_table',
   },
@@ -40,13 +38,11 @@ export = [
     url: 'postgres://dadefinire',
     synchronize: 'false',
     logging: true,
-    entities: ['src/models/**/*.ts'],
+    entities: entities,
     migrations: ['src/migrations/**/*.ts'],
-    subscribers: ['src/subscriber/**/*.ts'],
     cli: {
       entitiesDir: 'src/models',
       migrationsDir: 'src/migrations',
-      subscribersDir: 'src/subscriber',
     },
     migrationsTableName: '_migration_table',
   },

@@ -62,7 +62,7 @@ createConnection(process.env.NODE_ENV)
 
     // Parse class-validator classes into JSON Schema:
     const metadatas = (getFromContainer(MetadataStorage) as any).validationMetadatas;
-    const schemas = validationMetadatasToSchemas(metadatas, {
+    const schemas = validationMetadatasToSchemas({
       refPointerPrefix: '#/components/schemas/',
     });
 
