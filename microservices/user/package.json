@@ -69,7 +69,7 @@
       "build:ormconfig": "webpack --config webpack.ormconfig.config.js",
       "build:migrations": "webpack --config webpack.migration.config.js",
       "lint": "tslint --project tsconfig.json",
-      "run": "set debug=* && ts-node-dev --respawn --transpileOnly -r tsconfig-paths/register ./src/index.ts",
+      "run": "set debug=* && cross-env NODE_ENV=default ts-node-dev --respawn --transpileOnly -r tsconfig-paths/register ./src/index.ts",
       "migration:add": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:generate -n",
       "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm",
       "copy:files": "yarn run copy:readme && yarn run copy:conduct",

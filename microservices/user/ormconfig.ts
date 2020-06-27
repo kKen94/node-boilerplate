@@ -4,7 +4,7 @@ export = [
   /*** per lo sviluppo in localhost con il db persistente ****/
   {
     environment: 'dev',
-    name: 'development',
+    name: 'default',
     type: 'postgres',
     url: 'postgresql://postgres:postgres@localhost:54321/user',
     synchronize: 'true',
