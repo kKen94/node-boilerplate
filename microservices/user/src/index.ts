@@ -18,6 +18,7 @@ import { createConnection } from 'typeorm';
 import { seed } from './seeds/seed';
 import { CONTROLLERS } from '@controllers';
 import { MIDDLEWARES } from '@middlewares';
+import { CONNECTIONS } from './connection';
 
 const routingControllersOptions = {
   // routePrefix: '/api',
@@ -67,7 +68,9 @@ const routingControllersOptions = {
   },
 };
 
-createConnection(process.env.NODE_ENV)
+const connectionOpt = CONNECTIONS.find(c => c.name === process.env.NODE_ENV) ?? CONNECTIONS.find(c => c.name === 'default');
+
+createConnection(connectionOpt)
   .then(async connection => {
     const app = createKoaServer(routingControllersOptions);
 

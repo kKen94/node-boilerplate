@@ -64,9 +64,8 @@
    },
    "scripts": {
       "start": "yarn run run",
-      "build": "yarn run build:app && yarn run build:ormconfig && yarn run build:migrations",
+      "build": "yarn run build:app && yarn run build:migrations",
       "build:app": "webpack --config webpack.config.js",
-      "build:ormconfig": "webpack --config webpack.ormconfig.config.js",
       "build:migrations": "webpack --config webpack.migration.config.js",
       "lint": "tslint --project tsconfig.json",
       "run": "set debug=* && cross-env NODE_ENV=default ts-node-dev --respawn --transpileOnly -r tsconfig-paths/register ./src/index.ts",
@@ -98,9 +97,9 @@
          "git add"
       ]
    },
-   "private": true,
+   "private": false,
    "repository": {
       "type": "git",
-      "url": "https://github.com/t2c-dev/api.git"
+      "url": "https://github.com/t2c-dev/rendify-api.git"
    }
 }
