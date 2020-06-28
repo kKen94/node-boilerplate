@@ -12,7 +12,7 @@ export const CONNECTIONS: ConnectionOptions[] = [
     entities: ENTITIES,
     migrations: [
       'src/migrations/**/*.ts',
-      'migrations/**/*.js',
+      `${__dirname}/migrations/**/*.js`,
     ],
     cli: {
       entitiesDir: 'src/models',
@@ -30,7 +30,7 @@ export const CONNECTIONS: ConnectionOptions[] = [
     entities: ENTITIES,
     migrations: [
       'src/migrations/**/*.ts',
-      'migrations/**/*.js',
+      `${__dirname}/migrations/**/*.js`,
     ],
     cli: {
       entitiesDir: 'src/models',
@@ -47,7 +47,7 @@ export const CONNECTIONS: ConnectionOptions[] = [
     entities: ENTITIES,
     migrations: [
       'src/migrations/**/*.ts',
-      'migrations/**/*.js',
+      `${__dirname}/migrations/**/*.js`,
     ],
     cli: {
       entitiesDir: 'src/models',
@@ -64,7 +64,7 @@ export const CONNECTIONS: ConnectionOptions[] = [
     entities: ENTITIES,
     migrations: [
       'src/migrations/**/*.ts',
-      'migrations/**/*.js',
+      `${__dirname}/migrations/**/*.js`,
     ],
     cli: {
       entitiesDir: 'src/models',
