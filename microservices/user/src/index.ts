@@ -100,8 +100,9 @@ createConnection(connectionOpt)
       },
     );
     // @ts-ignore
-    app.use(koaSwagger({ routePrefix: '/swagger', swaggerOptions: { spec } }));
-    app.use(e2k(swStats.getMiddleware({ swaggerSpec: spec })));
+    // app.use(koaSwagger({ routePrefix: '/swagger', swaggerOptions: { spec } }));
+    // app.use(e2k(swStats.getMiddleware({ swaggerSpec: spec })));
+    // TODO: capire come compilare koa-swagger
 
     app.listen(3001, async () => {
       await verifySmtpAsync();
