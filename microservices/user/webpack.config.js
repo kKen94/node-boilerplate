@@ -1,6 +1,7 @@
 const FilterWarningsPlugin = require('webpack-filter-warnings-plugin');
 const resolveTsconfigPathsToAlias = require('./resolve-paths');
 const TerserPlugin = require('terser-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
   mode: 'production',
@@ -44,6 +45,11 @@ module.exports = {
   plugins: [
     new FilterWarningsPlugin({
       exclude: [/mongodb/, /mssql/, /mysql/, /mysql2/, /oracledb/, /pg-native/, /pg-query-stream/, /react-native-sqlite-storage/, /redis/, /sqlite3/, /sql.js/, /typeorm-aurora-data-api-driver/, /@sap\/hdbext/, /body-parser/, /express/, /koa-multer/]
+    }),
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify(process.env.NODE_ENV ?? 'default')
+      }
     })
   ]
 };
