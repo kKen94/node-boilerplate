@@ -1,7 +1,6 @@
 import { jwtEagle } from '@config';
 import { cleanToken, getRepo, verifySmtpAsync } from '@helper';
 import { UserRepository } from '@repository';
-import { getFromContainer, MetadataStorage } from 'class-validator';
 import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
 import * as e2k from 'express-to-koa';
 import * as jwt from 'jsonwebtoken';
@@ -74,9 +73,6 @@ createConnection(connectionOpt)
   .then(async connection => {
     const app = createKoaServer(routingControllersOptions);
 
-    // Parse class-validator classes into JSON Schema:
-    const metadatas = (getFromContainer(MetadataStorage) as any)
-      .validationMetadatas;
     const schemas = validationMetadatasToSchemas({
       refPointerPrefix: '#/components/schemas/',
     });
