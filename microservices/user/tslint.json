@@ -12,6 +12,7 @@
   },
   "jsRules": {},
   "rules": {
+    "align": false,
     "max-line-length": {
       "options": [{"limit": 120}]
     },

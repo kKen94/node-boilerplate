@@ -3,5 +3,4 @@ node_modules/
 yarn.lock
 tsconfig.json
 tslint.json
-yarn.lock
 package.json

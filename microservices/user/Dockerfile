@@ -1,30 +1,13 @@
-FROM node:12-alpine
-
+FROM node:12-alpine AS builder
 ARG NODE_ENV
 ENV NODE_ENV=${NODE_ENV}
-
-WORKDIR /usr/src/app
-
-COPY package.json ./
-COPY yarn.lock ./
-
-RUN yarn install
-
+WORKDIR /app
+COPY package.json yarn.lock ./
+RUN yarn
 COPY . .
+RUN yarn run build
 
-EXPOSE 3001
-CMD [ "yarn", "run", "dockerfile:cmd" ]
-
-#FROM node:12 AS builder
-#WORKDIR /app
-#COPY ./package.json ./
-#COPY yarn.lock ./
-#RUN yarn install
-#COPY . .
-#RUN yarn run build
-#
-#
-#FROM node:12-alpine
-#WORKDIR /app
-#COPY --from=builder /app ./
-#ENTRYPOINT ["node", "index.js"]
+FROM node:12-alpine
+WORKDIR /app
+COPY --from=builder /app/dist ./
+ENTRYPOINT ["node", "index.js"]

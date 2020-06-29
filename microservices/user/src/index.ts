@@ -18,6 +18,7 @@ import { seed } from './seeds/seed';
 import { CONTROLLERS } from '@controllers';
 import { MIDDLEWARES } from '@middlewares';
 import { CONNECTIONS } from './connection';
+import * as polly from 'polly-js';
 
 const routingControllersOptions = {
   // routePrefix: '/api',
@@ -69,7 +70,9 @@ const routingControllersOptions = {
 
 const connectionOpt = CONNECTIONS.find(c => c.name === process.env.NODE_ENV) ?? CONNECTIONS.find(c => c.name === 'default');
 
-createConnection(connectionOpt)
+polly()
+  .waitAndRetry([2000, 3000, 5000])
+  .executeForPromise(() => createConnection(connectionOpt))
   .then(async connection => {
     const app = createKoaServer(routingControllersOptions);
 
@@ -99,9 +102,12 @@ createConnection(connectionOpt)
         },
       },
     );
-    // @ts-ignore
-    // app.use(koaSwagger({ routePrefix: '/swagger', swaggerOptions: { spec } }));
-    // app.use(e2k(swStats.getMiddleware({ swaggerSpec: spec })));
+
+    if (process.env.NODE_ENV === 'default') {
+      // @ts-ignore
+      app.use(koaSwagger({ routePrefix: '/swagger', swaggerOptions: { spec } }));
+      app.use(e2k(swStats.getMiddleware({ swaggerSpec: spec })));
+    }
     // TODO: capire come compilare koa-swagger
 
     app.listen(3001, async () => {
@@ -109,7 +115,6 @@ createConnection(connectionOpt)
       await seed(connection);
       console.log('Server started on port 3001 😎');
     });
-  })
-  .catch(error => {
-    console.log(error);
+  }, err => {
+    console.error('Failed trying three times', err);
   });
