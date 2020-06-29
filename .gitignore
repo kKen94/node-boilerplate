@@ -7,4 +7,4 @@
 */**/temp/
 */**/src/log/
 
-microservices/user/yarn-error.log
+src/microservices/user/yarn-error.log

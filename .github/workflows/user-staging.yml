@@ -5,7 +5,7 @@ on:
     branches:
       - staging
     paths:
-      - 'microservices/user/**'
+      - 'src/microservices/user/**'
 
 jobs:
   checkError:
@@ -22,15 +22,15 @@ jobs:
             node-version: '12.x'
       - name: Install dependencies
         run: |
-          cd microservices/user
+          cd src/microservices/user
           yarn
       #- name: Test
       #  run: |
-      #    cd microservices/user
+      #    cd src/microservices/user
       #    yarn run test
       - name: Build local
         run: |
-          cd microservices/user
+          cd src/microservices/user
           yarn run build
   pushImage:
     name: Build and publish docker image
@@ -57,6 +57,6 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
-          cd microservices/user
+          cd src/microservices/user
           yarn run docker:build:staging
           docker push $ECR_REGISTRY/user.api-staging

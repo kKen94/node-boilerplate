@@ -5,69 +5,68 @@ services:
     container_name: user.api
     image: ${REGISTRY:-rendify}/user.api:${PLATFORM:-linux}-${TAG:-latest}
     build:
-      context: ./microservices/user
+      context: ./src/microservices/user
       dockerfile: Dockerfile
       args:
         - NODE_ENV=dev
     depends_on:
       - user-data
-#      - rabbit
-    ports:
-      - "3001:3001"
+      - rabbit-rendify
     networks:
-      - t2c-api-dev
+      - rendify-api-dev
 
   user-data:
     image: postgres:11.5
     networks:
-      - t2c-api-dev
+      - rendify-api-dev
     container_name: user-data
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=user
 
-#  kong:
-#    image: kong
-#    container_name: kong
-#    build:
-#      context: .
-#      dockerfile: src/gateways/kong/Dockerfile
-#    environment:
-#      KONG_ADMIN_ACCESS_LOG: /dev/stdout
-#      KONG_ADMIN_ERROR_LOG: /dev/stderr
-#      KONG_ADMIN_LISTEN:0.0.0.0:8001, 0.0.0.0:8444 ssl
-#      KONG_DECLARATIVE_CONFIG: /usr/local/kong/declarative/kong.yml
-#      KONG_DATABASE: off
-#      KONG_PROXY_ACCESS_LOG: /dev/stdout
-#      KONG_PROXY_ERROR_LOG: /dev/stderr
-#    networks:
-#      - kong-net
-#      - api-dev
-#    volumes:
-#      - kong_data:/usr/local/kong/declarative
-#    ports:
-#      - "8000:8000/tcp"
-#      - "127.0.0.1:8001:8001/tcp"
-#      - "8443:8443/tcp"
-#      - "127.0.0.1:8444:8444/tcp"
-#    healthcheck:
-#      test: ["CMD", "kong", "health"]
-#      interval: 10s
-#      timeout: 10s
-#      retries: 10
-#    restart: on-failure
-#    deploy:
-#      restart_policy:
-#        condition: on-failure
+  kong-rendify:
+    image: ${REGISTRY:-rendify}/kong:${PLATFORM:-linux}-${TAG:-latest}
+    container_name: kong-rendify
+    build:
+      context: ./src/gateways/kong
+      dockerfile: Dockerfile
+    environment:
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN: 0.0.0.0:5001, 0.0.0.0:5444 ssl
+      KONG_DECLARATIVE_CONFIG: /usr/local/kong/declarative/kong.yml
+      KONG_DATABASE: "off"
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+    networks:
+      - kong-net
+      - rendify-api-dev
+    volumes:
+      - kong_vol:/usr/local/kong/declarative
+    ports:
+      - "5000:5000/tcp"
+      - "127.0.0.1:5001:5001/tcp"
+      - "5443:5443/tcp"
+      - "127.0.0.1:5444:5444/tcp"
+    healthcheck:
+      test: ["CMD", "kong", "health"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+    restart: on-failure
 
-#  rabbit:
-#    image: rabbitmq:3-management-alpine
-#    networks:
-#      - t2c-api-dev
-#    container_name: rabbit
-#    environment:
-#      - RABBITMQ_DEFAULT_USER=rabbit_user
-#      - RABBITMQ_DEFAULT_PASS=Rabbit_123
+  rabbit-rendify:
+    image: rabbitmq:3-management-alpine
+    networks:
+      - rendify-api-dev
+    container_name: rabbit-rendify
+    environment:
+      - RABBITMQ_DEFAULT_USER=rabbit_user
+      - RABBITMQ_DEFAULT_PASS=Rabbit_123
 
 networks:
-  t2c-api-dev:
+  rendify-api-dev:
+  kong-net:
+
+volumes:
+  kong_vol: {}

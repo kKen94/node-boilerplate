@@ -110,10 +110,13 @@ polly()
     }
     // TODO: capire come compilare koa-swagger
 
-    app.listen(3001, async () => {
+    const port = (process.env.NODE_ENV === 'default') ? 3001 : 80;
+
+    app.listen(port, async () => {
       await verifySmtpAsync();
       await seed(connection);
-      console.log('Server started on port 3001 😎');
+      console.log(`Server started on port ${port} 😎`);
+      console.log(process.env.NODE_ENV);
     });
   }, err => {
     console.error('Failed trying three times', err);
