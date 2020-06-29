@@ -32,7 +32,7 @@ module.exports = {
     filename: 'index.js',
   },
   optimization: {
-    minimize: false,
+    minimize: true,
     minimizer: [
       new TerserPlugin({
         terserOptions: {
@@ -48,7 +48,7 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       'process.env': {
-        'NODE_ENV': JSON.stringify(process.env.NODE_ENV ?? 'default')
+        'NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'default')
       }
     })
   ]
