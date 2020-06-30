@@ -21,7 +21,7 @@ import { CONNECTIONS } from './connection';
 import * as polly from 'polly-js';
 
 const routingControllersOptions = {
-  routePrefix: '/user',
+  // routePrefix: '/user',
   controllers: CONTROLLERS,
   middlewares: MIDDLEWARES,
   defaults: {
