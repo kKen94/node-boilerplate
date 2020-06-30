@@ -1,31 +1,19 @@
 _format_version: '1.1'
 
 services:
-- name: rendify-frontend
-  host: localhost
-  connect_timeout: 60000
+- name: user.api
+  host: user.api
   path: /
-  port: 4300
-  protocol: http
+  connect_timeout: 60000
   read_timeout: 60000
   retries: 5
   write_timeout: 60000
   routes:
   - name: user.api
-    hosts:
-      - user.api
     methods:
     - GET
     - POST
     - PUT
     - DELETE
     paths:
-    - /user/
-    preserve_host: false
-    protocols:
-    - http
-    - https
-    regex_priority: 0
-    strip_path: true
-    path_handling: v0
-    https_redirect_status_code: 426
+    - /user

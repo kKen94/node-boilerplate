@@ -20,9 +20,12 @@ services:
     networks:
       - rendify-api-dev
     container_name: user-data
+    volumes:
+      - user_data:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=user
+      - PGDATA=/var/lib/postgresql/data/pgdata
 
   kong-rendify:
     image: ${REGISTRY:-rendify}/kong:${PLATFORM:-linux}-${TAG:-latest}
@@ -42,8 +45,6 @@ services:
     networks:
       - kong-net
       - rendify-api-dev
-    volumes:
-      - kong_vol:/usr/local/kong/declarative
     ports:
       - "5000:5000/tcp"
       - "127.0.0.1:5001:5001/tcp"
@@ -70,4 +71,4 @@ networks:
   kong-net:
 
 volumes:
-  kong_vol: {}
+  user_data: {}
