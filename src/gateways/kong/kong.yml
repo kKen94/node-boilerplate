@@ -4,7 +4,7 @@ services:
 - name: user.api
   host: user.api
   connect_timeout: 60000
-  path: /user
+  path: /
   port: 80
   protocol: http
   read_timeout: 60000
@@ -18,7 +18,7 @@ services:
     - PUT
     - DELETE
     paths:
-    - /
+    - /user
     preserve_host: false
     protocols:
     - http

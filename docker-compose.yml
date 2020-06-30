@@ -34,6 +34,7 @@ services:
       KONG_ADMIN_ACCESS_LOG: /dev/stdout
       KONG_ADMIN_ERROR_LOG: /dev/stderr
       KONG_ADMIN_LISTEN: 0.0.0.0:5001, 0.0.0.0:5444 ssl
+      KONG_PROXY_LISTEN: 0.0.0.0:5000, 0.0.0.0:5443 ssl
       KONG_DECLARATIVE_CONFIG: /usr/local/kong/declarative/kong.yml
       KONG_DATABASE: "off"
       KONG_PROXY_ACCESS_LOG: /dev/stdout
