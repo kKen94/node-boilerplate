@@ -66,9 +66,43 @@ services:
       - RABBITMQ_DEFAULT_USER=rabbit_user
       - RABBITMQ_DEFAULT_PASS=Rabbit_123
 
+  keycloak-db:
+    image: postgres:11.5
+    container_name: keycloak-db
+    volumes:
+      - keycloak_data:/var/lib/postgresql/data
+    networks:
+      - keycloak-net
+    environment:
+      - POSTGRES_PASSWORD=keycloak
+      - POSTGRES_DB=keycloak
+      - POSTGRES_USER=keycloak
+      - PGDATA=/var/lib/postgresql/data/pgdata
+
+  keycloak:
+    image: jboss/keycloak:10.0.2
+    depends_on:
+      - keycloak-db
+    networks:
+      - keycloak-net
+    ports:
+      - "8180:8080"
+    environment:
+      - DB_VENDOR=POSTGRES
+      - DB_ADDR=keycloak-db
+      - DB_PORT=5432
+      - DB_DATABASE=keycloak
+      - DB_USER=keycloak
+      - DB_SCHEMA=public
+      - DB_PASSWORD=keycloak
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+
 networks:
   rendify-api-dev:
+  keycloak-net:
   kong-net:
 
 volumes:
   user_data: {}
+  keycloak_data: {}
