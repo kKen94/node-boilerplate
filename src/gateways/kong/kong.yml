@@ -15,5 +15,7 @@ services:
     - POST
     - PUT
     - DELETE
+    - OPTIONS
     paths:
-    - /user
+    - /users/
+    path_handling: v0
