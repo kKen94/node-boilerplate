@@ -1,15 +1,14 @@
-_format_version: '1.1'
+_format_version: '2.1'
 
 services:
-- name: user.api
-  host: user.api
-  path: /
+- name: user-api
+  url: http://host.docker.internal:3001
   connect_timeout: 60000
   read_timeout: 60000
   retries: 5
   write_timeout: 60000
   routes:
-  - name: user.api
+  - name: user-api
     methods:
     - GET
     - POST
